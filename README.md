@@ -1,5 +1,4 @@
 # A BEGINNERS GUIDE TO PROGRAMMING
-Introduce beginners to the fundamentals of software development.
 
 A BEGINNERS GUIDE TO PROGRAMMING is a series of books to assist beginners in understanding the fundamentals of computer programming and coding.
 
@@ -23,7 +22,7 @@ Books 4 to 6 will cover project examples using the libraries in C, FreeBASIC and
 
 This project is currently at various stages of development. Books are a mix from "Draft" (Partial and incomplete) to "Draft Preview" (Final with possible errors and or omissions to be corrected) and the example source code will vary from alpha (Missing components) to beta (May still contain bugs).
 
-I am not an engineer, just an enthusiastic mature age tertiary student attempting to be helpful to our younger (or older) fellow students with an interest in ICT and computer programming. The hope is to remove some of the confusion and fear factor from what is an exceptional complex industry :)
+I am not an engineer, just an enthusiastic mature age tertiary student attempting to be helpful to our younger (or older) fellow students with an interest in ICT and computer programming. The hope is to remove some of the confusion and fear factor from what is an exceptionally complex industry :)
 Maybe it is enough to encourage some towards pursuing higher level studies in engineering.
 
 Axle
