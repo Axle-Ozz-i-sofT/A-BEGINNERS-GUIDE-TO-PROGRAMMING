@@ -1,3 +1,3 @@
 #TODO:
 
-Correct sofware licence notice.
+Correct source code licence notice.
