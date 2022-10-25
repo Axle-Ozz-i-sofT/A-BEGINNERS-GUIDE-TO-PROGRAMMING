@@ -2,7 +2,7 @@
 
 A BEGINNERS GUIDE TO PROGRAMMING is a series of books to assist beginners in understanding the fundamentals of computer programming and coding.
 
-The books have been created with an orientation toward programming rather than coding in any particular language. All examples are duplicated in C, FreeBASIC and Python 3 with the programming flow remaining much the same in a "Rosetta Stone" styled approach. This should allow a learner to distinguish between the different programming language keywords and syntax as well as the common underlying programming methodology used in each language.
+The books have been created with an orientation toward programming rather than coding in any particular language. All examples are duplicated in C, FreeBASIC and Python 3 with the programming flow remaining much the same in a "Rosetta Stone" styled approach. This should allow a learner to distinguish between the different programming language keywords and syntax as well as the common underlying programming methodology used in all three languages.
 
 At this time I have 6 proposed books in the series. The first 2 books focus on on programming fundamentals and setting up the development environments and IDEs. The development environments used are not an indication of the the "Best" commercial development paradigm, but reflect a low cost and simple method for students to "get their feet wet" without too much confusion.
 
