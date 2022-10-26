@@ -1,17 +1,17 @@
 /'******************************************************************************************
 *
-*   raylib [shapes] example - Draw basic shapes 2d (rectangle, Circle, line...)
+*   raylib [shapes] example - Draw basic shapes 2d (rectangle, circle, line...)
 *
-*   Example originally created With raylib 1.0, last Time updated With raylib 4.0
+*   Example originally created with raylib 1.0, last time updated with raylib 4.2
 *
-*   Example licensed under an unmodified zlib/libpng license, which Is an OSI-certified,
-*   BSD-like license that allows Static linking With closed source software
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
 *******************************************************************************************'/
-'' Converted by: Axle (Original C source Copyright (c) 2016-2022 Ramon Santamaria (@raysan5))
-'' Date: 22/10/2022
+'' Converted by: Axle
+'' Date: 26/10/2022
 '' raylib V4.2.0
 '' raygui V3.2
 '' WIITD/raylib-freebasic binders 22/10/2022
@@ -25,7 +25,7 @@
 '' #inclib "rayguidll"  ' Raygui stand alone shared Win.
 ''
 '' raylib+raygui shared
-''RAYLIB_MODULE_RAYGUI=TRUE RAYLIB_LIBTYPE=SHARED
+'' RAYLIB_MODULE_RAYGUI=TRUE RAYLIB_LIBTYPE=SHARED
 '' #inclib "raylib"  ' raylib/raylib+raygui combined shared Linux.
 '' #inclib "raylibdll"  ' raylib/raylib+raygui combined shared Windows.
 
@@ -44,6 +44,8 @@ Function main_procedure() As Integer  ' Main procedure
     
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing")
     
+    Dim As Single rotation = 0.0
+    
     SetTargetFPS(60)               '' Set our game to run at 60 frames-per-second
     ''--------------------------------------------------------------------------------------
     
@@ -51,7 +53,7 @@ Function main_procedure() As Integer  ' Main procedure
     While (Not WindowShouldClose())    '' Detect window close button or ESC key
         '' Update
         ''----------------------------------------------------------------------------------
-        '' TODO: Update your variables here
+        rotation += 0.2  '' Polygon shapes and lines rotation
         ''----------------------------------------------------------------------------------
         
         '' Draw
@@ -82,8 +84,9 @@ Function main_procedure() As Integer  ' Main procedure
         Vector2(screenWidth/4.0*3.0 + 20.0, 230.0), DARKBLUE)
         
         '' Polygon shapes and lines
-        DrawPoly(Vector2(screenWidth/4.0*3, 320), 6, 80, 0, BROWN)
-        DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 320), 6, 80, 0, 6, BEIGE)
+        DrawPoly(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, BROWN)
+        DrawPolyLines(Vector2(screenWidth/4.0*3, 330 ), 6, 90, rotation, BROWN)
+        DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, 6, BEIGE)
         
         '' NOTE: We draw all LINES based shapes together to optimize internal drawing,
         '' this way, all LINES are rendered in a single draw pass

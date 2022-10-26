@@ -22,7 +22,7 @@
 *
 *
 *   DEPENDENCIES:
-*       raylib 4.0 - Windowing/Input management And drawing.
+*       raylib 4.0 - Windowing/input management and drawing.
 *       raygui 3.2 - Immediate-mode GUI controls.
 *
 *   COMPILATION (Windows - MinGW):
@@ -33,8 +33,8 @@
 *   Copyright (c) 2016-2022 Ramon Santamaria (@raysan5)
 *
 *********************************************************************************************'/
-'' Converted by: Axle (Original C source Copyright (c) 2016-2022 Ramon Santamaria (@raysan5))
-'' Date: 22/10/2022
+'' Converted by: Axle
+'' Date: 26/10/2022
 '' raylib V4.2.0
 '' raygui V3.2
 '' WIITD/raylib-freebasic binders 22/10/2022
@@ -48,7 +48,7 @@
 '' #inclib "rayguidll"  ' Raygui stand alone shared Win.
 ''
 '' raylib+raygui shared
-''RAYLIB_MODULE_RAYGUI=TRUE RAYLIB_LIBTYPE=SHARED
+'' RAYLIB_MODULE_RAYGUI=TRUE RAYLIB_LIBTYPE=SHARED
 '' #inclib "raylib"  ' raylib/raylib+raygui combined shared Linux.
 '' #inclib "raylibdll"  ' raylib/raylib+raygui combined shared Windows.
 
@@ -261,8 +261,13 @@ Function main_procedure() As Integer  ' Main procedure
         End If
         colorPickerValue = GuiColorPicker(Rectangle( 320, 185, 196, 192 ), NULL, colorPickerValue)
         
+        '' See C function "int vsprintf(char *str, const char *format, va_list arg)" for TextFormat("string format", arg)
+        '' Maybe we can place a FreeBASIC Single to String equivalent?
         sliderValue = GuiSlider(Rectangle( 355, 400, 165, 20 ), "TEST", TextFormat("%2.2f", Csng(sliderValue)), sliderValue, -50, 100)
+        '' The following also works correctly. Axle
+        'sliderValue = GuiSlider(Rectangle( 355, 400, 165, 20 ), "TEST", Str(Csng(sliderValue)), sliderValue, -50, 100)
         sliderBarValue = GuiSliderBar(Rectangle( 320, 430, 200, 20 ), NULL, TextFormat("%i", Clng(sliderBarValue)), sliderBarValue, 0, 100)
+        'sliderBarValue = GuiSliderBar(Rectangle( 320, 430, 200, 20 ), NULL, Str(Clng(sliderBarValue)), sliderBarValue, 0, 100)
         progressValue = GuiProgressBar(Rectangle( 320, 460, 200, 20 ), NULL, NULL, progressValue, 0, 1)
         
         '' NOTE: View rectangle could be used to perform some scissor test
