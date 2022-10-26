@@ -33,13 +33,15 @@
 *   Copyright (c) 2016-2022 Ramon Santamaria (@raysan5)
 *
 **********************************************************************************************/
-
+// Axle: Tested for A BEGINNERS GUIDE TO PROGRAMING - Book 3 Libraries Overview 26/10/2022
+// raylib 4.2 | raygui 3.2
 #include "raylib.h"
 
 #define RAYGUI_IMPLEMENTATION
 //#define RAYGUI_CUSTOM_ICONS     // It requires providing gui_icons.h in the same directory
 //#include "gui_icons.h"          // External icons data provided, it can be generated with rGuiIcons tool
-#include "../../src/raygui.h"
+//#include "../../src/raygui.h"
+#include "raygui.h"
 
 #include <string.h>             // Required for: strcpy()
 

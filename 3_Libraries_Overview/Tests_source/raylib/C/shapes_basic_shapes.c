@@ -2,7 +2,7 @@
 *
 *   raylib [shapes] example - Draw basic shapes 2d (rectangle, circle, line...)
 *
-*   Example originally created with raylib 1.0, last time updated with raylib 4.0
+*   Example originally created with raylib 1.0, last time updated with raylib 4.2
 *
 *   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
 *   BSD-like license that allows static linking with closed source software
@@ -10,7 +10,8 @@
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
-
+// Axle: Tested for A BEGINNERS GUIDE TO PROGRAMING - Book 3 Libraries Overview 26/10/2022
+// raylib 4.2 | raygui 3.2
 #include "raylib.h"
 
 //------------------------------------------------------------------------------------
@@ -25,6 +26,8 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
 
+    float rotation = 0.0f;
+
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -33,7 +36,7 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        rotation += 0.2f;
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -55,17 +58,18 @@ int main(void)
             DrawRectangleLines(screenWidth/4*2 - 40, 320, 80, 60, ORANGE);  // NOTE: Uses QUADS internally, not lines
 
             // Triangle shapes and lines
-            DrawTriangle((Vector2){screenWidth/4.0f *3.0f, 80.0f},
-                         (Vector2){screenWidth/4.0f *3.0f - 60.0f, 150.0f},
-                         (Vector2){screenWidth/4.0f *3.0f + 60.0f, 150.0f}, VIOLET);
+            DrawTriangle((Vector2){ screenWidth/4.0f *3.0f, 80.0f },
+                         (Vector2){ screenWidth/4.0f *3.0f - 60.0f, 150.0f },
+                         (Vector2){ screenWidth/4.0f *3.0f + 60.0f, 150.0f }, VIOLET);
 
-            DrawTriangleLines((Vector2){screenWidth/4.0f*3.0f, 160.0f},
-                              (Vector2){screenWidth/4.0f*3.0f - 20.0f, 230.0f},
-                              (Vector2){screenWidth/4.0f*3.0f + 20.0f, 230.0f}, DARKBLUE);
+            DrawTriangleLines((Vector2){ screenWidth/4.0f*3.0f, 160.0f },
+                              (Vector2){ screenWidth/4.0f*3.0f - 20.0f, 230.0f },
+                              (Vector2){ screenWidth/4.0f*3.0f + 20.0f, 230.0f }, DARKBLUE);
 
             // Polygon shapes and lines
-            DrawPoly((Vector2){screenWidth/4.0f*3, 320}, 6, 80, 0, BROWN);
-            DrawPolyLinesEx((Vector2){screenWidth/4.0f*3, 320}, 6, 80, 0, 6, BEIGE);
+            DrawPoly((Vector2){ screenWidth/4.0f*3, 330 }, 6, 80, rotation, BROWN);
+            DrawPolyLines((Vector2){ screenWidth/4.0f*3, 330 }, 6, 90, rotation, BROWN);
+            DrawPolyLinesEx((Vector2){ screenWidth/4.0f*3, 330 }, 6, 85, rotation, 6, BEIGE);
 
             // NOTE: We draw all LINES based shapes together to optimize internal drawing,
             // this way, all LINES are rendered in a single draw pass
