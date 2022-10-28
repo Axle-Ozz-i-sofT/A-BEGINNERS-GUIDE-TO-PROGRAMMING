@@ -1,4 +1,4 @@
-/'******************************************************************************************
+/'****************************************************************************************
 *
 *   raygui - controls test suite
 *
@@ -32,7 +32,7 @@
 *
 *   Copyright (c) 2016-2022 Ramon Santamaria (@raysan5)
 *
-*********************************************************************************************'/
+*****************************************************************************************'/
 '' Converted by: Axle
 '' Date: 26/10/2022
 '' raylib V4.2.0
@@ -50,7 +50,7 @@
 '' raylib+raygui shared
 '' RAYLIB_MODULE_RAYGUI=TRUE RAYLIB_LIBTYPE=SHARED
 '' #inclib "raylib"  ' raylib/raylib+raygui combined shared Linux.
-'' #inclib "raylibdll"  ' raylib/raylib+raygui combined shared Windows.
+''#inclib "raylibdll"  ' raylib/raylib+raygui combined shared Windows.
 
 #include "raylib.bi"
 

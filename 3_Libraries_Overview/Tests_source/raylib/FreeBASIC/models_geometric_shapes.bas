@@ -1,8 +1,8 @@
 /'*****************************************************************************************
 *
-*   raylib [shapes] example - Draw basic shapes 2d (rectangle, circle, line...)
+*   raylib [models] example - Draw some basic geometric shapes (cube, sphere, cylinder...)
 *
-*   Example originally created with raylib 1.0, last time updated with raylib 4.2
+*   Example originally created with raylib 1.0, last time updated with raylib 3.5
 *
 *   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
 *   BSD-like license that allows static linking with closed source software
@@ -11,7 +11,7 @@
 *
 *****************************************************************************************'/
 '' Converted by: Axle
-'' Date: 26/10/2022
+'' Date: 27/10/2022
 '' raylib V4.2.0
 '' raygui V3.2
 '' WIITD/raylib-freebasic binders 22/10/2022
@@ -41,64 +41,67 @@ Function main_procedure() As Integer  ' Main procedure
     '' Initialization
     ''--------------------------------------------------------------------------------------
     Const As Long screenWidth = 800, screenHeight = 450
-    
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing")
-    
-    Dim As Single rotation = 0.0
-    
+
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - geometric shapes")
+
+    '' Define the camera to look into our 3d world
+    dim as Camera3D camera_3D
+    camera_3D.position = vector3(0.0, 10.0, 10.0)    ' Camera position
+    camera_3D.target = vector3(0.0, 0.0, 0.0)        ' Camera looking at point
+    camera_3D.up = vector3(0.0, 1.0, 0.0)            ' Camera up vector (rotation towards target)
+    camera_3D.fovy = 45.0                            ' Camera field-of-view Y
+    camera_3D.projection = CAMERA_PERSPECTIVE        ' Camera mode type
+
     SetTargetFPS(60)               '' Set our game to run at 60 frames-per-second
     ''--------------------------------------------------------------------------------------
-    
+
     '' Main game loop
-    While (Not WindowShouldClose())    '' Detect window close button or ESC key
+    while (not WindowShouldClose())    '' Detect window close button or ESC key
         '' Update
         ''----------------------------------------------------------------------------------
-        rotation += 0.2  '' Polygon shapes and lines rotation
+        '' TODO: Update your variables here
         ''----------------------------------------------------------------------------------
-        
+
         '' Draw
         ''----------------------------------------------------------------------------------
         BeginDrawing()
-        
-        ClearBackground(RAYWHITE)
-        
-        DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY)
-        
-        '' Circle shapes and lines
-        DrawCircle(screenWidth/5, 120, 35, DARKBLUE)
-        DrawCircleGradient(screenWidth/5, 220, 60, GREEN, SKYBLUE)
-        DrawCircleLines(screenWidth/5, 340, 80, DARKBLUE)
-        
-        '' Rectangle shapes and ines
-        DrawRectangle(Int(screenWidth/4*2 - 60), 100, 120, 60, RED)
-        DrawRectangleGradientH(Int(screenWidth/4*2 - 90), 170, 180, 130, MAROON, GOLD)
-        DrawRectangleLines(Int(screenWidth/4*2 - 40), 320, 80, 60, ORANGE)  '' NOTE: Uses QUADS internally, not lines
-        
-        '' Triangle shapes and lines
-        DrawTriangle(Vector2(screenWidth/4.0 *3.0, 80.0), _
-        Vector2(screenWidth/4.0 *3.0 - 60.0, 150.0), _
-        Vector2(screenWidth/4.0 *3.0 + 60.0, 150.0), VIOLET)
-        
-        DrawTriangleLines(Vector2(screenWidth/4.0*3.0, 160.0), _
-        Vector2(screenWidth/4.0*3.0 - 20.0, 230.0), _
-        Vector2(screenWidth/4.0*3.0 + 20.0, 230.0), DARKBLUE)
-        
-        '' Polygon shapes and lines
-        DrawPoly(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, BROWN)
-        DrawPolyLines(Vector2(screenWidth/4.0*3, 330 ), 6, 90, rotation, BROWN)
-        DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, 6, BEIGE)
-        
-        '' NOTE: We draw all LINES based shapes together to optimize internal drawing,
-        '' this way, all LINES are rendered in a single draw pass
-        DrawLine(18, 42, screenWidth - 18, 42, BLACK)
+
+            ClearBackground(RAYWHITE)
+
+            BeginMode3D(camera_3D)
+
+                DrawCube     (Vector3(-4.0, 0.0, 2.0), 2.0, 5.0, 2.0, RED)
+                DrawCubeWires(Vector3(-4.0, 0.0, 2.0), 2.0, 5.0, 2.0, GOLD)
+                DrawCubeWires(Vector3(-4.0, 0.0, -2.0), 3.0, 6.0, 2.0, MAROON)
+
+                DrawSphere     (Vector3(-1.0, 0.0, -2.0), 1.0, GREEN)
+                DrawSphereWires(Vector3(1.0, 0.0, 2.0), 2.0, 16, 16, LIME)
+
+                DrawCylinder     (Vector3(4.0, 0.0, -2.0), 1.0, 2.0, 3.0, 4, SKYBLUE)
+                DrawCylinderWires(Vector3(4.0, 0.0, -2.0), 1.0, 2.0, 3.0, 4, DARKBLUE)
+                DrawCylinderWires(Vector3(4.5, -1.0, 2.0), 1.0, 1.0, 2.0, 6, BROWN)
+
+                DrawCylinder     (Vector3(1.0, 0.0, -4.0), 0.0, 1.5, 3.0, 8, GOLD)
+                DrawCylinderWires(Vector3(1.0, 0.0, -4.0), 0.0, 1.5, 3.0, 8, PINK)
+
+                'Available in next release.
+                'DrawCapsule     (Vector3(-3.0, 1.5, -4.0), Vector3(-4.0, -1.0, -4.0), 1.2, 8, 8, VIOLET)
+                'DrawCapsuleWires(Vector3(-3.0, 1.5, -4.0), Vector3(-4.0, -1.0, -4.0), 1.2, 8, 8, PURPLE)
+
+                DrawGrid(10, 1.0)  '' Draw a grid
+
+            EndMode3D()
+
+            DrawFPS(10, 10)
+
         EndDrawing()
         ''----------------------------------------------------------------------------------
-    Wend
-    
+    wend
+
     '' De-Initialization
     ''--------------------------------------------------------------------------------------
     CloseWindow()        '' Close window and OpenGL context
     ''--------------------------------------------------------------------------------------
-    
+
     Return 0
 End Function  ' END main_procedure <---
