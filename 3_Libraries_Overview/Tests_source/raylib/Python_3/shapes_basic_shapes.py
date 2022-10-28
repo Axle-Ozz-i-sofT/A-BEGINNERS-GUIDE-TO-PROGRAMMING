@@ -1,4 +1,4 @@
-#*******************************************************************************************
+#******************************************************************************************
 #
 #   raylib [shapes] example - Draw basic shapes 2d (rectangle, circle, line...)
 #
@@ -9,7 +9,7 @@
 #
 #   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 #
-#*******************************************************************************************/
+#*****************************************************************************************/
 # Converted by Axle with assist from electronstudio
 # (Original C source Copyright (c) 2016-2022 Ramon Santamaria (@raysan5))
 # Date: 26/10/2022
@@ -104,10 +104,15 @@ def main():
                         Vector2(float(int_screen_width/4.0*3.0 + 20.0), 230.0), DARKBLUE)
     
         # Polygon shapes and lines
-        draw_poly(Vector2(float(int_screen_width/4.0*3), 320), 6, 80, rotation, BROWN)
+        draw_poly(Vector2(float(int_screen_width/4.0*3), 330), 6, 80, rotation, BROWN)
         draw_poly_lines(Vector2(float(int_screen_width/4.0*3), 330 ), 6, 90, rotation, BROWN);
-        draw_poly_lines_ex(Vector2(float(int_screen_width/4.0*3), 320), 6, 80, rotation, 6, BEIGE)
-    
+        draw_poly_lines_ex(Vector2(float(int_screen_width/4.0*3), 330), 6, 85, rotation, 6, BEIGE)
+
+        # Polygon shapes and lines (Alternative :)
+        #draw_poly(Vector2(float(int_screen_width/4.0*3), 320), 6, 80, rotation, BROWN)
+        #draw_poly_lines(Vector2(float(int_screen_width/4.0*3), 330 ), 6, 90, rotation, BROWN);
+        #draw_poly_lines_ex(Vector2(float(int_screen_width/4.0*3), 320), 6, 80, rotation, 6, BEIGE)
+
         # NOTE: We draw all LINES based shapes together to optimize internal drawing,
         # this way, all LINES are rendered in a single draw pass
         draw_line(18, 42, int_screen_width - 18, 42, BLACK)
