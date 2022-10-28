@@ -82,11 +82,16 @@ Function main_procedure() As Integer  ' Main procedure
         DrawTriangleLines(Vector2(screenWidth/4.0*3.0, 160.0), _
         Vector2(screenWidth/4.0*3.0 - 20.0, 230.0), _
         Vector2(screenWidth/4.0*3.0 + 20.0, 230.0), DARKBLUE)
-        
+
         '' Polygon shapes and lines
-        DrawPoly(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, BROWN)
+        DrawPoly(Vector2(screenWidth/4.0*3, 330), 6, 80, rotation, BROWN)
         DrawPolyLines(Vector2(screenWidth/4.0*3, 330 ), 6, 90, rotation, BROWN)
-        DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, 6, BEIGE)
+        DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 330), 6, 85, rotation, 6, BEIGE)
+
+        '' Polygon shapes and lines (Alternative :)
+        'DrawPoly(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, BROWN)
+        'DrawPolyLines(Vector2(screenWidth/4.0*3, 330 ), 6, 90, rotation, BROWN)
+        'DrawPolyLinesEx(Vector2(screenWidth/4.0*3, 320), 6, 80, rotation, 6, BEIGE)
         
         '' NOTE: We draw all LINES based shapes together to optimize internal drawing,
         '' this way, all LINES are rendered in a single draw pass
