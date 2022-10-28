@@ -12,5 +12,8 @@ Examples have been tested on Windows 10 and Lubuntu 20.04 LTS
 shapes_basic_shapes  
 ![shapes_basic_shapes](./Images/shapes_basic_shapes.png)  
 
+models_geometric_shapes  
+![models_geometric_shapes](./Images/models_geometric_shapes.png)  
+
 controls_test_suite  
 ![controls_test_suite](./Images/controls_test_suite.png)  
