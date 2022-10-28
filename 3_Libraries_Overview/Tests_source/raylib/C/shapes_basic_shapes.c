@@ -9,9 +9,8 @@
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
-********************************************************************************************/
+******************************************************************************************/
 // Axle: Tested for A BEGINNERS GUIDE TO PROGRAMING - Book 3 Libraries Overview 26/10/2022
-// raylib 4.2 | raygui 3.2
 #include "raylib.h"
 
 //------------------------------------------------------------------------------------
@@ -67,9 +66,14 @@ int main(void)
                               (Vector2){ screenWidth/4.0f*3.0f + 20.0f, 230.0f }, DARKBLUE);
 
             // Polygon shapes and lines
-            DrawPoly((Vector2){ screenWidth/4.0f*3, 330 }, 6, 80, rotation, BROWN);
+            //DrawPoly((Vector2){ screenWidth/4.0f*3, 330 }, 6, 80, rotation, BROWN);
+            //DrawPolyLines((Vector2){ screenWidth/4.0f*3, 330 }, 6, 90, rotation, BROWN);
+            //DrawPolyLinesEx((Vector2){ screenWidth/4.0f*3, 330 }, 6, 85, rotation, 6, BEIGE);
+
+            // Polygon shapes and lines (Alternative :)
+            DrawPoly((Vector2){ screenWidth/4.0f*3, 320 }, 6, 80, rotation, BROWN);
             DrawPolyLines((Vector2){ screenWidth/4.0f*3, 330 }, 6, 90, rotation, BROWN);
-            DrawPolyLinesEx((Vector2){ screenWidth/4.0f*3, 330 }, 6, 85, rotation, 6, BEIGE);
+            DrawPolyLinesEx((Vector2){ screenWidth/4.0f*3, 320 }, 6, 80, rotation, 6, BEIGE);
 
             // NOTE: We draw all LINES based shapes together to optimize internal drawing,
             // this way, all LINES are rendered in a single draw pass
