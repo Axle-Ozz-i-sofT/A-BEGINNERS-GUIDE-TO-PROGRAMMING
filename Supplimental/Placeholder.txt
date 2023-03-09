@@ -1,1 +1,0 @@
-Placeholder for "A Beginners Guide To SDL_bgi.PDF".
