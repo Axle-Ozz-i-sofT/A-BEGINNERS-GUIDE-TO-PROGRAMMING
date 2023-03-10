@@ -1,0 +1,201 @@
+
+Axle
+
+Images and artwork
+Most images are modified adaptations for the game by Axle - February 2023.
+
+Images are converted to BMP and resized. Images have alpha channel converted to
+Black RGB 0.0.0 for layer blending.
+
+Most audio has been converted unmodified to PCM WAV file format.
+
+If you wish to use artwork in your own designs I strongly recommend starting
+from the original source.
+
+All artwork and Audio used in this game retains the licence of the respective
+copyright holders as listed below.
+
+###############################################################################
+
+	Space Shooter (Redux, plus fonts and sounds) by Kenney Vleugels (www.kenney.nl)
+
+			------------------------------
+
+			        License (CC0)
+	       http://creativecommons.org/publicdomain/zero/1.0/
+
+	You may use these graphics in personal and commercial projects.
+	Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.
+
+    https://www.kenney.nl/assets/space-shooter-redux
+
+###############################################################################
+
+
+Bubble Explosion by Tiao Ferreira
+
+Licence OGA-BY 3.0, CC0
+https://static.opengameart.org/OGA-BY-3.0.txt
+
+Copyright/Attribution Notice: 
+Make your name, make a good game! Tião Ferreira
+
+https://opengameart.org/content/bubble-explosion
+
+###############################################################################
+
+Warp effect 2 by Skorpio
+
+Licence CC-BY 3.0 GPL 3.0
+
+https://opengameart.org/content/warp-effect-2
+
+###############################################################################
+
+Seamless Space Backgrounds by Screaming Brain Studios
+
+Licence CC0
+
+https://opengameart.org/content/seamless-space-backgrounds
+
+###############################################################################
+
+Space backgrounds by fraang
+
+Licence CC-BY-SA 3.0
+
+https://opengameart.org/content/space-backgrounds-0
+
+##############################################################################
+
+Space Background by StumpyStrust
+
+Licence CC0
+
+https://opengameart.org/content/space-background-2
+
+##############################################################################
+
+Space Backgrounds by Rawdanitsu
+
+Licence CC0
+
+https://opengameart.org/content/space-backgrounds-3
+
+##############################################################################
+
+Space Backgrounds by Rawdanitsu
+
+Licence CC0
+
+https://opengameart.org/content/space-backgrounds-2
+
+##############################################################################
+Sound FX and Music
+##############################################################################
+
+OpenBundle by gamesounds.xyz
+
+"Ring Leader (loop).mp3"
+
+THIS PACKAGE IS UNCOPYRIGHTED.
+
+- - -
+
+SHARE IT: 
+    You are not only allowed, but encouraged, to share 
+    this package with all your friends!
+
+REMIX IT:
+    Feel free to modify and build upon this work. 
+    Attribution is nice, but we won't legally mandate it.
+
+PROFIT: 
+    If you can make money off of using this work,
+    that's awesome, and you should. It ain't a zero-sum world.
+
+- - -
+
+Published under the Creative Commons Zero license:
+http://creativecommons.org/publicdomain/zero/1.0/
+
+README
+From The Open Bundle
+http://open.commonly.cc
+
+- - -
+
+This package contains the original soundtracks from:
+1. Adventure Story - http://www.kongregate.com/games/kupo707/adventure-story
+2. Bullet Heaven - http://www.kongregate.com/games/kupo707/bullet-heaven
+3. Epic Battle Fantasy III - http://www.kongregate.com/games/kupo707/epic-battle-fantasy-3
+
+All music is by HalcyonicFalconX, the musician behind the Epic Battle Fantasy series.
+A parody of Final Fantasy classics, EBF brings together all that is great about 
+the old games and various anime sources. She is also making a new High Fantasy 
+retro-style RPG called Kobold Conquest, due to be released sometime next year.
+
+Bandcamp: halcyonicFalconX.bandcamp.com
+Facebook: www.facebook.com/HalcyonicFalconX
+Twitter: @Phyrnna 
+
+##############################################################################
+
+	Digital Audio
+
+	by  Kenney Vleugels (Kenney.nl)
+
+			------------------------------
+
+	License (Creative Commons Zero, CC0)
+	http://creativecommons.org/publicdomain/zero/1.0/
+
+	You may use these assets in personal and commercial projects.
+	Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.
+
+			------------------------------
+
+	Donate:   http://support.kenney.nl
+	Request:  http://request.kenney.nl
+
+	Follow on Twitter for updates:
+	@KenneyNL
+    
+    https://www.kenney.nl/assets/digital-audio
+
+##############################################################################
+
+	Sci-Fi Sounds (1.0)
+
+	Created/distributed by Kenney (www.kenney.nl)
+	Creation date: 11-10-2020
+
+			------------------------------
+
+	License: (Creative Commons Zero, CC0)
+	http://creativecommons.org/publicdomain/zero/1.0/
+
+	This content is free to use in personal, educational and commercial projects.
+
+	Support us by crediting Kenney or www.kenney.nl (this is not mandatory)
+
+			------------------------------
+
+	Donate:   http://support.kenney.nl
+	Patreon:  http://patreon.com/kenney/
+
+	Follow on Twitter for updates:
+	http://twitter.com/KenneyNL
+
+    https://www.kenney.nl/assets/sci-fi-sounds
+
+##############################################################################
+
+
+
+
+
+
+
+
+
