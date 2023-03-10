@@ -12,7 +12,7 @@ I created this and offer it up as a demo for others who may be looking at making
 I would consider also looking at Version 2.x.x.x as I have corrected and highlighted many of the limitations and issues that I had encountered.  
 Version 2 also offers a demonstration of using a game intro and outro :)  
 
-You will need both SDL2 development version as wel as SDL_Bgi Version 3.  
+You will need [SDL2](https://github.com/libsdl-org/SDL) development version, [SDL_Bgi V3](https://sdl-bgi.sourceforge.io/) as wel as [WavBeep02.zip](https://encode.su/threads/383-A-command-line-tool-for-Windows-which-beeps-through-the-System-Speaker).  
 Please read my booklet "A Beginners Guide To SDL_bgi.pdf" for how to set up the library as well as setting up the project in Dev-C++ and Code::Blocks.
 
 At the moment I have only done some C labguage demos but I am looking at creating some SDL_Bgi demos in both FreeBASIC and Python3 as well.
