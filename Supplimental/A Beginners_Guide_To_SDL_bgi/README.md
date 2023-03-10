@@ -8,3 +8,11 @@ The source has been tested on Windows 1 and Lubuntu 20.04. Some examples will ru
 This is a supplimental to **"Book 3 - Libraries Overview"**
 
 The booklet is downloadable as a PDF. Please check the "example source" directory for the Hello World examples from the book (Don't copy the source from the PDF as the code formating will be broken).
+
+---
+## Some More SDL_Bgi demos  
+
+- Anolog Clock - Seconds ticks  
+- Analog Clock - Quartz action  
+- Space_Shoot_Bgi_V1  
+- Space_Shoot_Bgi_V1  
