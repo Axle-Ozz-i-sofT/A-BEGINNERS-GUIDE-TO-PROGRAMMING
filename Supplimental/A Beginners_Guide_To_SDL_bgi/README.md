@@ -14,5 +14,5 @@ The booklet is downloadable as a PDF. Please check the "example source" director
 
 - Anolog Clock - Seconds ticks  
 - Analog Clock - Quartz action  
-- Space_Shoot_Bgi_V1  
-- Space_Shoot_Bgi_V1  
+- [Space_Shoot_Bgi_V1](https://github.com/Axle-Ozz-i-sofT/Space_Shoot_Bgi_V1)  
+- [Space_Shoot_Bgi_V2](https://github.com/Axle-Ozz-i-sofT/Space_Shoot_Bgi_V2)  
