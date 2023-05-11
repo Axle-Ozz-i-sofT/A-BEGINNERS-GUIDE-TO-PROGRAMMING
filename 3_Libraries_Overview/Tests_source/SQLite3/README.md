@@ -6,4 +6,4 @@ sqlite3.dll or libsqlite.so.n must be in the system path or script directory (ma
   
 This will become part of an archive collection of source code that will accompany Book 3 "A Beginners Guide To Libs.pdf".
 
-I have also decided to provide the C and FreeBASIC source for context.
+I have also decided to provide the C and FreeBASIC source for context. The C source will require sqlite3.h header in the source directory. FreeBASIC used the built in "sqlite3.bi".
