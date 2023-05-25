@@ -40,7 +40,7 @@ There are 4 Python modules in this repo and are organised as follows:
 ***
 <br>
 As well as the examples provided here I would also recommend obtaining a copy of a database management application to check your entries and queries for accuracy or errors in your code. Although SQLite does provide helpful return and error codes, the inside of the database file can be quite opaque from a programmatic perspective. Use the database management application along side of your IDE to monitor the database.  
-If you are considering storing BLOBS in your database I would also recommend being familiar with a Hex Editor application as well as something like Notepad++. Byte lengths and actual bytes stored and returned must be checked for length and compared with the original data. A hex editor will allow you to format hex data from python as well as the database file. Notepad++ will allow easy and easy diff compare as well as total bytes compare between formatted hexadecimal.  
+If you are considering storing BLOBS in your database I would also recommend being familiar with a Hex Editor application as well as something like Notepad++. Byte lengths and actual bytes stored and returned must be checked for length and compared with the original data. A hex editor will allow you to format hex data from python as well as the database file. Notepad++ will allow an easy diff compare as well as total bytes compare between formatted hexadecimal.  
   
 I am using the portable version of "DB Browser for SQLite"  
 https://sqlitebrowser.org/dl/ for database management.
