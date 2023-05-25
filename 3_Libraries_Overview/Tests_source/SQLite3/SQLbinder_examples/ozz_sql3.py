@@ -10,7 +10,7 @@
 # Author:       Axle
 #
 # Created:      11/05/2023
-# Updated:      15/05/2023
+# Updated:      23/05/2023
 # Copyright:    (c) Axle 2023
 # Licence:      MIT-0 No Attribution
 #-------------------------------------------------------------------------------
@@ -27,10 +27,27 @@
 # Python types when data is returned. This happens by default with most Python
 # library modules but occurs in a more opeque manner in the background.
 #
+# This also exemplifies a basic "Porocedural" method for interacting with any
+# CDECL based dll/so library from Python 3 that you may have created yourself.
+#
 # NOTE!
-# Not all conversions for data types have been full tested at this time.
+# Not all conversions for data types have been fully tested at this time.
 # Use this as a guide rather than a fully tested binder.
 #
+#-------------------------------------------------------------------------------
+# Credits:
+# https://stephenscotttucker.medium.com/interfacing-python-with-c-using-ctypes-classes-and-arrays-42534d562ce7
+# https://realpython.com/pointers-in-python/
+# https://dbader.org/blog/python-ctypes-tutorial
+# https://github.com/trolldbois/ctypeslib
+# https://www.scaler.com/topics/python-ctypes/
+# https://solarianprogrammer.com/2019/07/18/python-using-c-cpp-libraries-ctypes/
+# https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
+#
+# Special thanks for assistance with ctypes conversions, especialy the
+# sqlite3_column_blob() void* to Python Byte string conversions.
+# https://gist.github.com/michalc
+# https://gist.github.com/michalc/a3147997e21665896836e0f4157975cb
 #-------------------------------------------------------------------------------
 
 import ctypes, sys, os
@@ -38,9 +55,6 @@ import ctypes, sys, os
 ## ====>> Error Constants
 # Beware of name conflicts!
 from ozz_sql3_constants import *
-
-# https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
-# https://gist.github.com/michalc/a3147997e21665896836e0f4157975cb
 
 
 ## ====>> SQLite3 Ctype structures
@@ -123,7 +137,7 @@ def sqlite3_errmsg(id_lib_sql3, p_db):
 def sqlite3_libversion_number(id_lib_sql3):
 
     id_lib_sql3.sqlite3_libversion_number.argtypes = None  # No argements are sent to the C function (aka function(void);)
-    id_lib_sql3.sqlite3_libversion_number.restype = ctypes.c_int  # returns char* = ctypes.c_char_p
+    id_lib_sql3.sqlite3_libversion_number.restype = ctypes.c_int  # returns int = ctypes.ctypes.c_int
 
     return id_lib_sql3.sqlite3_libversion_number()
 
@@ -371,13 +385,7 @@ def sqlite3_column_origin_name(id_lib_sql3, p_stmt, N):
 
     return id_lib_sql3.sqlite3_column_origin_name(p_stmt, N).decode('utf-8')  # Convert b'' to utf-8 str
 
-# SQLITE_API const void *sqlite3_column_origin_name16(sqlite3_stmt*,int);
-def sqlite3_column_origin_name(id_lib_sql3, p_stmt, N):
-
-    id_lib_sql3.sqlite3_column_origin_name.argtypes = [ctypes.POINTER(sqlite3_stmt), ctypes.c_int]
-    id_lib_sql3.sqlite3_column_origin_name.restype = ctypes.c_char_p
-
-    return id_lib_sql3.sqlite3_column_origin_name(p_stmt, N).decode('utf-8')  # Convert b'' to utf-8 str
+#SQLITE_API const void *sqlite3_column_origin_name16(sqlite3_stmt*,int);
 
 
 ## CAPI3REF: Declared Datatype Of A Query Result
@@ -433,13 +441,14 @@ def sqlite3_step(id_lib_sql3, p_stmt):
 # SQLITE_API const void *sqlite3_column_blob(sqlite3_stmt*, int iCol);
 def sqlite3_column_blob(id_lib_sql3, p_stmt, iCol):
     id_lib_sql3.sqlite3_column_blob.argtypes = [ctypes.c_void_p, ctypes.c_int]
-    id_lib_sql3.sqlite3_column_blob.restype = ctypes.c_char_p  # c_ubyte
-
+    id_lib_sql3.sqlite3_column_blob.restype = ctypes.c_void_p  # c_ubyte ctypes.c_char_p
     # iCol refers to the current column in the return data. Use a loop with
     # iCol enumerated for each col/row of data. sqlite3_column_* returns one
     # column at a time.
     # Returns void* (unsigned char*).
-    return id_lib_sql3.sqlite3_column_blob(p_stmt, iCol)
+
+    return ctypes.string_at(id_lib_sql3.sqlite3_column_blob(p_stmt, iCol), id_lib_sql3.sqlite3_column_bytes(p_stmt, iCol))
+
 
 # SQLITE_API double sqlite3_column_double(sqlite3_stmt*, int iCol);
 def sqlite3_column_double(id_lib_sql3, p_stmt, iCol):
@@ -485,6 +494,13 @@ def sqlite3_column_text(id_lib_sql3, p_stmt, iCol):
     # iCol enumerated for each col/row of data. sqlite3_column_* returns one
     # column at a time.
     # Returns UTF-8 string.
+
+    ## As this returns unsigned char* it is classed as a byte integer so the
+    ## conversion to 'utf-8' string may not work as expected. If so a modification
+    ## of the following ctypes.string_at( ... ) may be required. Also note that
+    ## 'utf-8' can be 1 to 4 bytes long.
+    ##ctypes.string_at(id_lib_sql3.sqlite3_column_text(p_stmt, iCol), id_lib_sql3.sqlite3_column_bytes(p_stmt, iCol))
+
     return id_lib_sql3.sqlite3_column_text(p_stmt, iCol).decode('utf-8')
 
 

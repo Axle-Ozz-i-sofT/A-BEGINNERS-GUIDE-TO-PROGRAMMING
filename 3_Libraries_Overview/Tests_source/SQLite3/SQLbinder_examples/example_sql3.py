@@ -9,7 +9,7 @@
 # Author:       Axle
 #
 # Created:      15/05/2023
-# Updated:      15/05/2023
+# Updated:      23/05/2023
 # Copyright:    (c) Axle 2023
 # Licence:      MIT-0 No Attribution
 #-------------------------------------------------------------------------------
@@ -183,7 +183,7 @@
 # Revise db_delete_table_rowdata()
 # Revise db_insert_table_rowdata_rowid() for error handling while loop.
 #
-# Check array off by 1s.
+# Check arrays off by 1s.
 #------------------------------------------------------------------------------
 
 
@@ -2487,9 +2487,12 @@ def db_list_table_all_types(db_file_name, db_table_name, variant_structure, numb
     NULL = None
 
     # Define our type flags.
+    # Note:NUMERIC can hold any data type as an integer but is an affinity
+    # rather than a type. In most instances NUMERIC will convert to int or float.
+    # I have not used NUMERIC.
     IS_NULL = 5
     IS_INTEGER = 1
-    IS_FLOAT = 2
+    IS_FLOAT = 2  ## REAL
     IS_TEXT = 3
     IS_BLOB = 4
 
@@ -2539,7 +2542,7 @@ def db_list_table_all_types(db_file_name, db_table_name, variant_structure, numb
                 variant_structure[num_rows][i]['data'] = ozz_sql3.sqlite3_column_int(id_lib_sql3, p_stmt, i)
 
             elif caseis == SQLITE_FLOAT:  # REAL
-                variant_structure[num_rows][i]['typeof'] = IS_FLOAT
+                variant_structure[num_rows][i]['typeof'] = IS_FLOAT  ## REAL
                 variant_structure[num_rows][i]['data'] = ozz_sql3.sqlite3_column_double(id_lib_sql3, p_stmt, i)
 
             elif caseis == SQLITE_TEXT:
@@ -2548,7 +2551,10 @@ def db_list_table_all_types(db_file_name, db_table_name, variant_structure, numb
 
             elif caseis == SQLITE_BLOB:
                 variant_structure[num_rows][i]['typeof'] = IS_BLOB
-                variant_structure[num_rows][i]['data'] = ozz_sql3.sqlite3_column_blob(id_lib_sql3, p_stmt, i)
+                byte_string = ozz_sql3.sqlite3_column_blob(id_lib_sql3, p_stmt, i)
+                #print("Len byte_string:" + str( byte_string))
+                #print(ozz_sql3.sqlite3_column_blob(id_lib_sql3, p_stmt, i))
+                variant_structure[num_rows][i]['data'] = byte_string
                 variant_structure[num_rows][i]['length'] = ozz_sql3.sqlite3_column_bytes(id_lib_sql3, p_stmt, i)
 
                 #0000  ff d8 ff e2 02 1c 49 43 43 5f 50 52 4f 46 49 4c  ......ICC_PROFIL
