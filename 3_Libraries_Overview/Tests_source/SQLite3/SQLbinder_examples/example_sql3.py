@@ -188,7 +188,7 @@
 #------------------------------------------------------------------------------
 
 
-import ctypes, sys, os
+import sys, os
 import ozz_sql3
 
 ## ====>> Error Constants
@@ -272,7 +272,7 @@ def sqlite3_get_version2(ret_version):
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Cannot open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Cannot open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -298,7 +298,7 @@ def sqlite3_get_version2(ret_version):
     return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_query, -1, p_stmt, pzTail)
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(id_lib_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')), file=sys.stderr)  # DEBUG
+        print("Failed to prepare data: " + str(id_lib_sql3.sqlite3_errmsg(id_lib_sql3, p_db)), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -308,7 +308,7 @@ def sqlite3_get_version2(ret_version):
     # of data, therefore, we call this function only once.
     return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)
     if return_code != SQLITE_ROW:
-        print("Step error: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Step error: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return 0
 
@@ -324,14 +324,14 @@ def sqlite3_get_version2(ret_version):
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt)
     if return_code != SQLITE_OK:
         # This is error handling code.
-        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         id_lib_sql3.sqlite3_close(p_db)
         return -1
 
     return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
     if return_code != SQLITE_OK:
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
-        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         return -1
 
     return 1
@@ -449,7 +449,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_open_v2( id_lib_sql3, db_file_name, p_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, p_zVfs )
     if return_code != SQLITE_OK:
         # Note: these print returns can be commented out if only the Bool return 0; is required.
-        print("Can't open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Can't open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db )
         return -1
 
@@ -468,7 +468,7 @@ def db_file_create(db_file_name):
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -480,7 +480,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt );  # run once for one statement
     #    while( sqlite3_step( stmt ) == SQLITE_ROW ) {;}
     if return_code != SQLITE_DONE:  # SQLITE_DONE==101, SQLITE_ROW==100
-        print("Step 1 failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Step 1 failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return 0
 
@@ -492,7 +492,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
     if return_code != SQLITE_OK:  # SQLITE_OK==0
         # This is error handling code.
-        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -502,7 +502,7 @@ def db_file_create(db_file_name):
     ## The database file is already open!!!
     #    return_code = sqlite3_open_v2(id_lib_sql3, db_file_name, p_db, SQLITE_OPEN_READWRITE, NULL );
     #    if return_code != SQLITE_OK:
-    #        print("Can't open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+    #        print("Can't open database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
     #        ozz_sql3.sqlite3_close( id_lib_sql3, p_db )
     #        return 0
 
@@ -514,7 +514,7 @@ def db_file_create(db_file_name):
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -526,7 +526,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt )
     #    while( sqlite3_step( stmt ) == SQLITE_ROW ) {;}
     if return_code != SQLITE_DONE:  # SQLITE_DONE==101, SQLITE_ROW==100
-        print("Step 2 failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Step 2 failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return 0
 
@@ -537,7 +537,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
     if return_code != SQLITE_OK:  # SQLITE_OK==0
         # This is error handling code.
-        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -545,7 +545,7 @@ def db_file_create(db_file_name):
     return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)   # SQLITE_OK==0
     if return_code != SQLITE_OK:
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
-        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -706,7 +706,7 @@ def db_get_number_tables(db_file_name, number_tables_ret):
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -729,7 +729,7 @@ def db_get_number_tables(db_file_name, number_tables_ret):
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
     if return_code != SQLITE_OK:  # SQLITE_OK==0
         # This is error handling code.
-        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -737,7 +737,7 @@ def db_get_number_tables(db_file_name, number_tables_ret):
     return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)   # SQLITE_OK==0
     if return_code != SQLITE_OK:
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
-        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -785,7 +785,7 @@ def db_get_tablenames(db_file_name, db_tablenames):
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -801,7 +801,7 @@ def db_get_tablenames(db_file_name, db_tablenames):
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
     if return_code != SQLITE_OK:  # SQLITE_OK==0
         # This is error handling code.
-        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -809,7 +809,7 @@ def db_get_tablenames(db_file_name, db_tablenames):
     return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)   # SQLITE_OK==0
     if return_code != SQLITE_OK:
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
-        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
         return -1
 
@@ -1334,7 +1334,7 @@ def db_insert_table_rowdata(db_file_name, db_tbl_entry): # add insert at row_id
 # Delete the row data searched by name matching etc.
 # ## Only for tables where all field types are TEXT (String) except rowid. ##
 # This function is dangerous and needs to be revised!!!!
-def db_delete_table_rowdata(db_file_name, db_delete_table_rowdata): # add delete at row_id
+def db_delete_table_rowdata(db_file_name, sql_search_entry): # add delete at row_id
 
     # Get the path to the SQLite3 shared library file (dll/so).
     f_library_sql3 = ozz_sql3.get_libsql3_path()  # Get the path for sqlite.dll/so
@@ -1370,7 +1370,7 @@ def db_delete_table_rowdata(db_file_name, db_delete_table_rowdata): # add delete
         return -1
 
     # We can only send one query at a time to sqlite3.
-    return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, db_row_entry, -1, p_stmt, pzTail)
+    return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_search_entry, -1, p_stmt, pzTail)
     # On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
     # is returned.
     if return_code != SQLITE_OK:
@@ -2216,8 +2216,8 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
     cnt_row = 0  # Used to count through each row of found data to test for duplicate rows.
     buffer = ""  # temp buffer [MAX 128 characters]
     token_buf = ""  # temp buffer [MAX 128 characters]
-    ch = 0  # character buffer.
-    x = 0  # while loop to retrieve row_id up to first ','
+    #ch = 0  # character buffer.
+    #x = 0  # while loop to retrieve row_id up to first ','
     # Flag to skip writing duplicate row to return array. Also skips ret array increment.
     row_id_exists = 0
     sql_concat = ""  # Build sql query statement.

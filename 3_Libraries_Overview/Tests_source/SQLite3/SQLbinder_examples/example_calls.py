@@ -80,7 +80,7 @@ def main():
 
     return_code = 0  # return codes and error codes returned from functions.
 
-    db_filename_ram = ":memory:"  # Using a temporary "In RAM" database.
+
 
     ver_buffer = []  # empty list (strings are imutable when passed to a function in python).
     err_return = 0;
@@ -132,12 +132,14 @@ def main():
     id_lib_sql3.sqlite3_errmsg.argtypes = [ctypes.c_void_p]
     id_lib_sql3.sqlite3_errmsg.restype = ctypes.c_char_p
 
+    db_filename_ram = ":memory:"  # Using a temporary "In RAM" database.
+
     return_code = ozz_sql3.sqlite3_open(id_lib_sql3, db_filename_ram, p_db)
     # On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
     # is returned.
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Cannot open database: " + str(id_lib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
+        print("Cannot open database: " + str(id_lib_sql3.sqlite3_errmsg(p_db)) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         id_lib_sql3.sqlite3_close(p_db)
         return -1
     #return 1
@@ -147,14 +149,14 @@ def main():
     return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_query, -1, p_stmt, None)
     if return_code != SQLITE_OK:
         # This is error handling code for the sqlite3_prepare_v2 function call.
-        print("Failed to prepare data: " + str(id_lib_sql3.sqlite3_errmsg(p_db).decode('utf-8')), file=sys.stderr);  # DEBUG
+        print("Failed to prepare data: " + str(id_lib_sql3.sqlite3_errmsg(p_db)), file=sys.stderr);  # DEBUG
         id_lib_sql3.sqlite3_close(p_db)
         return -1
 
     # Call once for each cols/rows. enumerate col/rows for iCol.
     return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)
     if return_code != SQLITE_ROW:
-        print("Step error: " + str(id_lib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
+        print("Step error: " + str(id_lib_sql3.sqlite3_errmsg(p_db)) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         id_lib_sql3.sqlite3_close(p_db)
         return -1
 
@@ -164,14 +166,14 @@ def main():
     return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_db, p_stmt)
     if return_code != SQLITE_OK:
         # This is error handling code.
-        print("Failed to finalize data: " + str(id_lib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
+        print("Failed to finalize data: " + str(id_lib_sql3.sqlite3_errmsg(p_db)) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         id_lib_sql3.sqlite3_close(p_db)
         return -1
 
     return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
     if return_code != SQLITE_OK:
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
-        print("Failed to close database: " + str(id_lib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
+        print("Failed to close database: " + str(id_lib_sql3.sqlite3_errmsg(p_db)) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         return -1
 
     print("2 SQLite Version:" + buffer2)
@@ -412,10 +414,10 @@ def main():
     # Single entry by Column Name:
     # "INSERT INTO table ( column2 ) VALUES( value2 );"
     # Full row:
-    # "INSERT INTO table (column1,column2 ,..) VALUES( value1,	value2 ,...);"
+    # "INSERT INTO table (column1,column2 ,..) VALUES( value1,  value2 ,...);"
     # Multiple rows:
     # "INSERT INTO table (column1,column2 ,..) \
-    #              VALUES( value1,	value2 ,...), \
+    #              VALUES( value1,  value2 ,...), \
     #                    (value1,value2 ,...), \
     #                    ... \
     #                    (value1,value2 ,...);
@@ -556,10 +558,10 @@ def main():
     # NOTE!!! This needs to be revised with more narrow focus and safeguards !!!
     # The following will delete ->ALL<- rows containing "1" and "Joe Blogs".
     # It is appropriate to check the entry row number index_id before deleting.
-    db_row_entry = "DELETE FROM Hrs_worked_Tracker\
+    sql_search_entry = "DELETE FROM Hrs_worked_Tracker\
                     WHERE Week = \"1\" AND Name = \"Joe Blogs\";"
 
-    err_return = example_sql3.db_delete_table_rowdata(file_name, db_row_entry)
+    err_return = example_sql3.db_delete_table_rowdata(file_name, sql_search_entry)
     if err_return == 0:
         print("Row data NOT deleted from " + file_name)
     elif err_return == 1:
@@ -700,7 +702,6 @@ def main():
     # the last row is INSERT INTO a new rowid at the end of the table
     # Copy notes from function to here!!!
     # Test error handling!!!
-    # Consider remove '\r\, '\n' etc. from strings.
 
     db_table_name3 = "Hrs_worked_Tracker"
     sql_rowid3 = 3

@@ -103,9 +103,10 @@ def get_libsql3_path():
 def load_libsql3(f_library_sql3):
     return ctypes.cdll.LoadLibrary(f_library_sql3)
 
+# Not tested!
 # hlib_sql3. Only used for direct OS operations.
-def handle_libsql3(id_lib_sql3):
-    return id_lib_sql3._handle
+#def handle_libsql3(id_lib_sql3):
+#    return id_lib_sql3._handle
 
 
 ## ====>> Start SQLite3 C API ctype conversions for each function.
@@ -604,7 +605,7 @@ def sqlite3_close_v2(id_lib_sql3, p_db):
 
 ## CAPI3REF: Suspend Execution For A Short Time
 # SQLITE_API int sqlite3_sleep(int); (milliseconds)
-def sqlite3_sleep(id_lib_sql3, p_db, tsleep):
+def sqlite3_sleep(id_lib_sql3, tsleep):
 
     id_lib_sql3.sqlite3_sleep.argtypes = [ctypes.c_int]
     id_lib_sql3.sqlite3_sleep.restype = ctypes.c_int
