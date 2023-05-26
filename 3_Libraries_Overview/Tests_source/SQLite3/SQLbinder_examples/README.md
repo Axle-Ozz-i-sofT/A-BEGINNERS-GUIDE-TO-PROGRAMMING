@@ -1,5 +1,4 @@
 # Python Sqlite 3 C API binder module and Examples
-## Suspended temporarily due to a naming conflict!. Source will return within a few days...
   
 This is a collection of examples to illustrate a procedural method of interacting with C based shared objects (*.dll/*so). Shared libraries used in the examples use the CDECL calling convention.  
 I have done this based upon the SQLite 3 binaries but the examples can also offer some insight into using your own dll/so or other libraries from Python 3.  
