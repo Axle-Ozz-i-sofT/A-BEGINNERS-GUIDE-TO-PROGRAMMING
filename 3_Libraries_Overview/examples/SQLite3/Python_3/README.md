@@ -6,7 +6,7 @@ I have done this based upon the SQLite 3 binaries but the examples can also offe
 The Python module "sqlite3 — DB-API 2.0 interface for SQLite databases" is a far more functional and well tested library for using SQLite 3 in a python application, but strays a little from the Standard C API used natively in SQLite. As such I created a basic "Ctypes" binder so that I could continue to use the C API calls in the same way as I have for my C and FreeBASIC versions of these examples. The binder "ozz_sql3.py" follows a "procedural/functional" approach rather than the Pythonic "OOP" approach.  
   
 ***
-Requires Sqlite3.dll (Version 3.34.1 dll.so) in the path or project directory. Windows beta, not tested on Linux.  
+Requires Sqlite3.dll (Version 3.34.1 dll.so) in the path or project directory. Tested on Windows 10 x85-64 and Ubuntu 20.04 x86-64.  
 ## Windows:  
 https://www.sqlite.org/2021/sqlite-amalgamation-3340100.zip  
 https://www.sqlite.org/2021/sqlite-dll-win64-x64-3340100.zip  
