@@ -38,4 +38,14 @@ https://sqlitebrowser.org/dl/ for database management.
 And HXD for checking binary (Hex) entries  
 https://mh-nexus.de/en/hxd/
 
+***  
+<br>  
+## Preview images  
+  
+Example_Tables  
+![Example_Tables](.././images/sql3_Tables.png)  
+  
+Example_Data
+![Example_Data](.././images/sql3_Data.png)  
+  
 Axle
