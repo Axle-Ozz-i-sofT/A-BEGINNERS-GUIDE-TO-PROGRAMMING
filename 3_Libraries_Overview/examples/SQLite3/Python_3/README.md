@@ -35,7 +35,9 @@ There are 4 Python modules in this repo and are organised as follows:
 * **ozz_sql3_constants.py**  
 	This is a file containing the common return codes and SQLite 3 constants from sqlite3.h  
 	They are a required import for any source that makes use of them.
-
+  
+Example_DB.db is an example of the correct database entries from the examples.  
+Tux.jpg is a small icon used for BLOB entries in the examples.  
 ***
 <br>
 As well as the examples provided here I would also recommend obtaining a copy of a database management application to check your entries and queries for accuracy or errors in your code. Although SQLite does provide helpful return and error codes, the inside of the database file can be quite opaque from a programmatic perspective. Use the database management application along side of your IDE to monitor the database.  
