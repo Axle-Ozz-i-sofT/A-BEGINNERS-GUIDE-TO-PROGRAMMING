@@ -1,4 +1,5 @@
 # C Sqlite 3 wrapper functions and Examples
+## Note! The function db_insert_table_rowdata_rowid() Fails when using a table with non-contiguous "rowid" numbers. I will correct and update soon.  
   
 This is a collection of C warapper functions and examples to illustrate methods of interacting with the SQLite 3 .dll/.so.  
   
