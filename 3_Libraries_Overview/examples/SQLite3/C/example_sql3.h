@@ -1795,7 +1795,9 @@ int db_replace_table_rowdata_rowid(char *db_file_name, char *db_table_name, int 
     return 1;
     }
 
-
+// !!! Note: This function currently failas on non contiguous rowid !!!
+// I will update and correct soon.
+//
 // Insert row data into a named table at rowid.
 // The current data at the rowid is written into a temporary buffer, the new row
 // data is then written to that rowid.
