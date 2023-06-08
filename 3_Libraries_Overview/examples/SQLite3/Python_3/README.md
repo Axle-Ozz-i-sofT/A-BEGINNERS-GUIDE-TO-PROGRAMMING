@@ -1,4 +1,5 @@
 # Python Sqlite 3 C API binder module and Examples
+## Note! The function db_insert_table_rowdata_rowid() Fails when using a table with non-contiguous "rowid" numbers. I will correct and update soon.  
   
 This is a collection of examples to illustrate a procedural method of interacting with C based shared objects (*.dll/*so). Shared libraries used in the examples use the CDECL calling convention.  
 I have done this based upon the SQLite 3 binaries but the examples can also offer some insight into using your own dll/so or other libraries from Python 3.  
