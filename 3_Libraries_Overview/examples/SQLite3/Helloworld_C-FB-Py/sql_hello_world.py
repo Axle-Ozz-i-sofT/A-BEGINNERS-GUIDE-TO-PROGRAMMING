@@ -23,7 +23,7 @@
 # (.dll, .so) exposed C API. In essence python types are translated to C types
 # for use by the C based shared object, and then C types are converted back to
 # Python types when data is returned. This happens by default with most Python
-# library modules but occurs in a more opeque manner in the background.
+# library modules but occurs in a more opaque manner in the background.
 #
 #-------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ import sys, os
 def main():  # Formal application entry after first IF
 
     return_code = 0
-    ver_buffer = []  # empty list (strings are imutable when passed to a function in python).
+    ver_buffer = []  # empty list (strings are immutable when passed to a function in python).
 
     ## Get the shared library path.
     # for windows
@@ -44,7 +44,7 @@ def main():  # Formal application entry after first IF
         #f_library = "D:\\SQLite3Tests\\Py\\sqlite3.dll"
     # for mac and linux
     elif os.name == 'posix':
-        #f_library = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recomended
+        #f_library = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recommended
         f_library = "libsqlite3.so"
     else:  # Other OS
         pass
@@ -56,7 +56,7 @@ def main():  # Formal application entry after first IF
 
     # define the ctype types for the C function:
     # const char *sqlite3_libversion(void);
-    idlib_sql3.sqlite3_libversion.argtypes = None  # No argements are sent to the C function (aka function(void);)
+    idlib_sql3.sqlite3_libversion.argtypes = None  # No arguments are sent to the C function (aka function(void);)
     idlib_sql3.sqlite3_libversion.restype = ctypes.c_char_p  # returns char* = ctypes.c_char_p
 
     # Get our SQLite version. Confirmation that sqlite 3 is installed as a
@@ -65,10 +65,10 @@ def main():  # Formal application entry after first IF
     # of the project python script at run-time.
     # NOTE: I am using the C API interface directly and not as a query. SQLite
     # provides a limited number of helper MACROS that can be accessed directly
-    # without opening a databse.
+    # without opening a database.
 
     # returns char which is detected as bytes? Correctly a byte is unsigned char,
-    # not char. That being said SQLite generally returns unsighned char* from
+    # not char. That being said SQLite generally returns unsigned char* from
     # most of the C API functions. c_char_p is meant to be char* and c_ubyte is
     # unsigned char* (aka binary BYTE) so I am not sure what is going on here.
     #bbytes = idlib_sql3.sqlite3_libversion()  # returns u_byte??
@@ -90,7 +90,7 @@ def main():  # Formal application entry after first IF
     elif return_code == 1:
         print("2 SQLite Version:" + ver_buffer[0])  # the version in element[0]
     else:  # == -1
-        print("An internal error occured.")
+        print("An internal error occurred.")
     print("===========================================")
 
     Con_Pause()  # DEBUG Pause
@@ -119,14 +119,13 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
         #f_library = "D:\\SQLite3Tests\\Py\\sqlite3.dll"
     # for mac and linux
     elif os.name == 'posix':
-        f_library = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recomended
+        f_library = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recommended
         f_library = "libsqlite3.so"
     else:  # Other OS
         pass
 
     idlib_sql3  = ctypes.cdll.LoadLibrary(f_library) # load the sqlite3 shared object.
     #print(type(idlib_sql3))  # DEBUG
-    hlib_sql3 = idlib_sql3._handle  # get the OS handle of the CDLL object (Not used here).
 
     # Create an sqlite3 class (struct)
     # sqlite3 *p_db;  # database handle (structure).
@@ -142,9 +141,10 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
 
     statement = ctypes.POINTER(sqlite3_stmt)()  # Create a C pointer to the class (struct)
 
+
     # define the types for the C functions:
     # const char *sqlite3_libversion(void);
-    #idlib_sql3.sqlite3_libversion.argtypes = None  # No argements are sent to the C function (aka function(void);)
+    #idlib_sql3.sqlite3_libversion.argtypes = None  # No arguments are sent to the C function (aka function(void);)
     #idlib_sql3.sqlite3_libversion.restype = ctypes.c_char_p  # returns char* = ctypes.c_char_p
 
     # functions called from a shared library (dll, so) must be defined using Ctypes.
@@ -157,7 +157,7 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
 
     # note that the first 2 functions require access to the class (structures)
     # "By Reference" so that the class (strcut) can be assigned data values.
-    # the following fuctions only have to see/read the data thus the
+    # the following functions only have to see/read the data thus the
     # ctypes.POINTER(ctypes.POINTER(sqlite3)) vs ctypes.c_void_p
     # this needs to be confirmed! i may have to use ** for all?
 
@@ -165,14 +165,18 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
     #                   const char *filename,   /* Database filename (UTF-8) */
     #                   sqlite3 **ppDb          /* OUT: SQLite db handle */
     #                   );
+
     idlib_sql3.sqlite3_open.argtypes = [ctypes.c_char_p, ctypes.POINTER(ctypes.POINTER(sqlite3))]
     idlib_sql3.sqlite3_open.restype = ctypes.c_int
+
     # int sqlite3_open_v2(
     #                       const char *filename,   /* Database filename (UTF-8) */
     #                       sqlite3 **ppDb,         /* OUT: SQLite db handle */
     #                       int flags,              /* Flags */
     #                       const char *zVfs        /* Name of VFS module to use */
     #                       );
+    idlib_sql3.sqlite3_open_v2.argtypes = [ctypes.c_char_p, ctypes.POINTER(ctypes.POINTER(sqlite3)), ctypes.c_int, ctypes.c_char_p]
+    idlib_sql3.sqlite3_open_v2.restype = ctypes.c_int
 
     # int sqlite3_prepare_v2(
     #                           sqlite3 *db,            /* Database handle */
@@ -254,7 +258,7 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
     # that there is another row ready. Our SQL statement returns only one row
     # of data in this case, therefore, we call this function only once.
     # If we expected multiple lines of data (rows, columns) we would need to
-    # recover each table cel as a step within a loop until end of data
+    # recover each table cell as a step within a loop until end of data
     # (!=SQLITE_ROW).
 
     return_code = idlib_sql3.sqlite3_step(statement)
@@ -272,18 +276,18 @@ def sqlite3_get_version2(ret_version):  # Note -> int is an IDE type hint
         return 0
 
     # The sqlite3_finalize function destroys the prepared statement object and
-    # commits the changes to the databse file.
+    # commits the changes to the database file.
     return_code = idlib_sql3.sqlite3_finalize(statement)
     if return_code != SQLITE_OK:
         # This is error handling code.
-        print("Failed to finalize data: " + str(idlib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
+        print("Failed to finalise data: " + str(idlib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         idlib_sql3.sqlite3_close(p_db)
         return -1
 
     # The sqlite3_close function closes the database connection.
     return_code = idlib_sql3.sqlite3_close(p_db)
     if return_code != SQLITE_OK:
-        # This is error handling code.
+        # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(idlib_sql3.sqlite3_errmsg(p_db).decode('utf-8')) + " | " + str(return_code), file=sys.stderr);  # DEBUG
         return -1
 

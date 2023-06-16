@@ -13,7 +13,7 @@
 ''------------------------------------------------------------------------------
 
 '' Header comes standard in FreeBASIC
-'' (Binary .dll, .so must be provided seperately in the path)
+'' (Binary .dll, .so must be provided separately in the path)
 #include once "sqlite3.bi"
 '' If required for other crt types and conversions. Note that "crt.bi" is already
 '' included in "sqlite3.bi"
@@ -35,7 +35,7 @@ Function main_procedure() As Integer  ' Main procedure
     '' of the project executable at run-time.
     '' NOTE: I am using the C API interface directly and not as a query. SQLite
     '' provides a limited number of helper MACROS that can be accessed directly
-    '' with out opening a databse.
+    '' with out opening a database.
     Print "1 SQLite Version:"; *Cast(zString Ptr,sqlite3_libversion())
     Print "==========================================="
     
@@ -116,7 +116,7 @@ Function sqlite3_get_version2(Byref ret_version As String) As Integer
     '' that there is another row ready. Our SQL statement returns only one row
     '' of data in this case, therefore, we call this function only once.
     '' If we expected multiple lines of data (rows, columns) we would need to
-    '' recover each table cel as a step within a loop until end of data
+    '' recover each table cell as a step within a loop until end of data
     '' (<>SQLITE_ROW).
     return_code = sqlite3_step(statement)
     If return_code = SQLITE_ROW Then

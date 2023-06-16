@@ -18,9 +18,9 @@
 //#include <errno.h>
 //#include <math.h>
 // Windows APIs are a limited subset of UNIX. aka UNIX APIs do not always
-// have an mscrt equivilent capability. Some features of UNIX are available
-// using UNIX emulation layers such as QT, MSYS2 amd WSL. These UNIX subsystems
-// require a slightly diferent standard library tool chain (headers.h) as well
+// have an mscrt equivalent capability. Some features of UNIX are available
+// using UNIX emulation layers such as QT, MSYS2 and WSL. These UNIX subsystems
+// require a slightly different standard library tool chain (headers.h) as well
 // as the subsystem shared objects to be available, but don't provide a direct
 // conversion from UNIX. Note that the UNIX subsystem libraries are quite large
 // and often introduce unnecessary overheads on Windows, so it is better to
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     // of the project executable at run-time.
     // NOTE: I am using the C API interface directly and not as a query. SQLite
     // provides a limited number of helper MACROS that can be accessed directly
-    // with out opening a databse.
+    // with out opening a database.
     printf("1 SQLite Version:%s\n", sqlite3_libversion());
     printf("===========================================\n");
 
@@ -127,7 +127,7 @@ int sqlite3_get_version2(char *ret_version)
     if (return_code != SQLITE_OK)
         {
         // This is error handling code for the sqlite3_prepare_v2 function call.
-        fprintf(stderr, "Failed to prepare data: %s | %s\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        fprintf(stderr, "Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
         sqlite3_close(p_db);
         return -1;
         }
@@ -155,7 +155,7 @@ int sqlite3_get_version2(char *ret_version)
         }
 
     // The sqlite3_finalize function destroys the prepared statement object and
-    // commits the changes to the databse file.
+    // commits the changes to the database file.
     return_code = sqlite3_finalize(statement);
     if (return_code != SQLITE_OK)
         {
