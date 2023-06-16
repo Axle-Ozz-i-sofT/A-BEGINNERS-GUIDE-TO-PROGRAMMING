@@ -14,10 +14,10 @@
 // Notes: basics_2.c ozz_sql3.h
 //
 // The examples are part of a small library ozz_sql3.h and are designed to
-// illustrate some of the basics of SQLite 3. They are not organized as and
+// illustrate some of the basics of SQLite 3. They are not organised as and
 // application and are designed to be rearranged, modified or used as a base
 // from which to create a small application. Some of the example calls have been
-// commented out to allow for the basic creation and reteival of some database
+// commented out to allow for the basic creation and retrieval of some database
 // tables. See ozz_sql3.h for a list of example functions and choose your
 // own arrangement for the test below, or alternatively create a small app
 // to accept user input and returns using the library functions.
@@ -27,8 +27,8 @@
 //
 // Get the MAX length of Field Names?
 // Get the length of a column, row entry?
-// This is not a native API for sqlite, so a function would need to be created
-// to analyze each individual row/col entry. For now I am just using arbitrary
+// This is not a native API for SQLite, so a function would need to be created
+// to analyse each individual row/col entry. For now I am just using arbitrary
 // static limits of [128, [512], [2048] <- you can increase them if needed.
 //
 // Check array off by 1s.
@@ -46,6 +46,7 @@
 // Turn off compiler warnings for unused variables between (Windows/Linux etc.)
 #define unused(x) (x) = (x)
 
+// Comment in or out examples as required.
 int main(int argc, char *argv[])
     {
     unused(argc);  // Turns off the compiler warning for unused argc, argv
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
         }
     else  // == -1
         {
-        printf("An internal error occured.\n");
+        printf("An internal error occurred.\n");
         }
     printf("===========================================\n");
 
@@ -158,7 +159,7 @@ int main(int argc, char *argv[])
         }
     else  // err_return==0
         {
-        printf("An internal error occured.\n");
+        printf("An internal error occurred.\n");
         }
     printf("===========================================\n");
 
@@ -288,11 +289,11 @@ int main(int argc, char *argv[])
     // become an alias for rowid. You do not have to add an entry for the
     // INTEGER PRIMARY KEY column as SQLite3 will automatically add the value.
     // Note the C string line continuation character \
-    // Note: \ will throw a compiler warning as you can accidentaly comment out
+    // Note: \ will throw a compiler warning as you can accidentally comment out
     // the next line using the continuation char.
     // We can also use = "My long string "
     //                   "on 2 lines";
-    /* // Note! this will fail with current function that only handle TEXT
+    /* // Note! this will fail with current functions that only handle TEXT
     char *db_table1 = "CREATE TABLE IF NOT EXISTS Hrs_worked_Tracker\
                          (INDEX_ID INTEGER PRIMARY KEY\
                          , Week TEXT\
@@ -471,10 +472,10 @@ int main(int argc, char *argv[])
     // TODO
     // Get the MAX length of Field Names?
     // Get the length of a column, row entry?
-    // Aa function would need to be created to analyze each individual row/col
+    // Aa function would need to be created to analyse each individual row/col
     // entry. For now I am just using arbitrary
     // static limits of [128, [512], [2048] <- you can increase them if needed.
-    // see: sqlite3_column_bytes() to get the dat length.
+    // see: sqlite3_column_bytes() to get the data length.
 
 
     // Return an array of column names (fields).
@@ -580,10 +581,32 @@ int main(int argc, char *argv[])
     // Print the table data. Column 0 is the row_id.
     printf("Table data:\n");
     printf("Array length = %d\n", number_rows_ret);
+    
+    char concat[64] = {'\0'};
+    strcpy(concat, "");
+
+    // Simple example to obtain the rowid for other tasks.
     for( i = 0; i < number_rows_ret; i++)
         {
-        printf("%s\n", db_tbl_data1[i]);
+        printf("%s\n", db_tbl_data1[i]);  // Print the full row data.
+        strcpy(concat, "");
+        // Obtain the first column (rowid) bfor ','
+        for(j = 0; j < strlen(db_tbl_data1[i]); j++)
+        {
+        if(db_tbl_data1[i][j] == ',')  // int 44
+               {
+               break;  // If we reach ',' then we have the value of rowid.
+               }
+            concat[j] = db_tbl_data1[i][j];  // Add each char of rowid.
+            concat[j+1] = '\0';  // String terminator.
+            }
+        printf("rowid = %s\n", concat);  // Print the rowid as char string.
+        // If you wish to use this rowid as an integer you will need to convert,
+        // or cast it to an integer value. See: atoi().
+
         }
+
+
 
     // deallocate dynamic memory
     for (i = 0; i < number_rows_ret; i++)
@@ -642,6 +665,7 @@ int main(int argc, char *argv[])
     printf("\nTable number of rows:%d\n", number_rows_ret);
     printf("===========================================\n");
 
+    int number_rows = number_rows_ret;
 
     // TODO:
     // Get last rowid. Only works after a db table was opened and not
@@ -651,6 +675,29 @@ int main(int argc, char *argv[])
 
 
     //========================================================================>>
+
+    // Test if rowid exist in a table.
+    //int db_table_rowid_exists(char *file_name, char *db_table_name, int rowid);
+    int tbl_rowid = 2;
+
+    err_return = db_table_rowid_exists(file_name, db_table_name, tbl_rowid);
+    if (err_return == 0)
+        {
+        printf("Table %s rowid does not exist.\n", db_table_name);
+        }
+    else if ( err_return == 1)
+        {
+        printf("Table %s rowid does exist.\n", db_table_name);
+        }
+    else  // == -1
+        {
+        printf("There was an unknown error.\n");
+        }
+
+    printf("\nRowid:%d\n", tbl_rowid);
+
+    printf("===========================================\n");
+
 
     /*
     // delete row by "rowid". This does not question or ask for confirmation!
@@ -696,7 +743,7 @@ int main(int argc, char *argv[])
     char *db_field_names = "Week, Employee_ID, Name, Monday, Tuesday, Wednesday, Thursday, Friday";
     char *db_field_values = "\"2\", \"36\", \"Jill Blogs\", \"9\", \"5\", \"4\", \"7\", \"6\"";
 
-    // Original entery.
+    // Original entry.
     //char *db_tbl_entry = "REPLACE INTO Hrs_worked_Tracker \
     //                               (rowid\
     //                               , Week\
@@ -742,8 +789,8 @@ int main(int argc, char *argv[])
     */
 
 
+
     // Get the current number of rows in the TableName.
-    int number_rows = 0;
 
     err_return = db_get_table_number_rows(file_name, db_table_name, &number_rows_ret);
     if (err_return == 0)
@@ -764,43 +811,53 @@ int main(int argc, char *argv[])
     printf("===========================================\n");
     number_rows = number_rows_ret;  // Used for db_insert_table_rowdata_rowid()
 
+
     /*
-        // insert by rowid?
-        // If rowid doesn't exist does not write.
-        // Copies each row down 1 at a time to create space and new row at rowid in the table.
-        // The new row is placed into the rowid using REPLACE INTO.
-        // the last row is INSERT INTO a new rowid at the end of the table
-        // Copy notes from function to here!!!
-        // Test error handling!!!
-        // Consider remove '\r\, '\n' etc. from strings.
+    // Insert row data into a named table at rowid. (Not recommended)
+    // I had some issues with non contiguous rowid numbers. I have created a test
+    // flag to skip empty rowid. Empty row id remain unchanged and all other
+    // filled rows are moved down one slot. This is a bit hackish and not the
+    // best method. We could use VACUUM to make the rowid index contiguous before
+    // each routine requiring rowid manipulation, or we can copy the table to
+    // a memory file with contiguous rowid, or last copy the enter table to our
+    // application memory and perform the table tasks there before re-writing
+    // the table fresh.
+    //
+    // If rowid doesn't exist does not write.
+    // Copies each row down 1 at a time to create space and new row at rowid in the table.
+    // The new row is placed into the rowid using REPLACE INTO.
+    // the last row is INSERT INTO a new rowid at the end of the table
+    // Copy notes from function to here!!!
+    // Test error handling!!!
+    // Consider remove '\r\, '\n' etc. from strings.
 
-        char *db_table_name3 = "Hrs_worked_Tracker";
-        int sql_rowid3 = 3;
-        // This can be obtained from db_get_table_colnames(). use concatenation to create the following string.
-        char *db_field_names3 = "Week, Employee_ID, Name, Monday, Tuesday, Wednesday, Thursday, Friday";
-        char *db_field_values3 = "\"2\", \"36\", \"Bill Knight\", \"2\", \"3\", \"4\", \"5\", \"6\"";
+    char *db_table_name3 = "Hrs_worked_Tracker";
+    int sql_rowid3 = 2;
+    // This can be obtained from db_get_table_colnames(). use concatenation to create the following string.
+    char *db_field_names3 = "Week, Employee_ID, Name, Monday, Tuesday, Wednesday, Thursday, Friday";
+    char *db_field_values3 = "\"2\", \"36\", \"Bill Roger\", \"2\", \"3\", \"4\", \"5\", \"6\"";
 
-        if(number_rows >= sql_rowid3)
+    if(number_rows >= sql_rowid3)
+    {
+    err_return = db_insert_table_rowdata_rowid(file_name, db_table_name3, sql_rowid3, db_field_names3, db_field_values3, number_columns, number_rows);
+    if (err_return == 0)
         {
-        err_return = db_insert_table_rowdata_rowid(file_name, db_table_name3, sql_rowid3, db_field_names3, db_field_values3, number_columns, number_rows);
-        if (err_return == 0)
-            {
-            printf("Row data was NOT inserted into %s.\n", file_name);
-            }
-        else if ( err_return == 1)
-            {
-            printf("Row data was inserted into %s.\n", file_name);
-            }
-        else  // == -1
-            {
-            printf("There was an unknown error.\n");
-            }
-    }
-        else
-        {
-            printf("rowid does not exist!\n");
+        printf("Row data was NOT inserted into %s.\n", file_name);
         }
-        printf("===========================================\n");
+    else if ( err_return == 1)
+        {
+        printf("Row data was inserted into %s.\n", file_name);
+        }
+    else  // == -1
+        {
+        printf("There was an unknown error.\n");
+        }
+    }
+    else
+    {
+        printf("rowid does not exist!\n");
+    }
+    printf("===========================================\n");
     */
 
 
@@ -936,7 +993,7 @@ int main(int argc, char *argv[])
         {
         printf("%s\n", db_tbl_data3[i]);
         }
-        */
+    */
     // Print returned search result (actual number search rows found).
     printf("Array length = %d\n", ret_array_length1);
     for( i = 0; i < ret_array_length1; i++)
@@ -989,9 +1046,9 @@ int main(int argc, char *argv[])
     //char *db_search_string2 = "\"Joe Blogs\"";
     //"\"2\", \"36\", \"Jill Blogs\", \"9\", \"5\", \"4\", \"7\", \"6\""  // DEBUG
     char *db_search_string2 = "\"9\"";  // 6, 9
-// # internalize field/column names !!!!!!
+    // # internalise field/column names ?
     // switch number_columns next to db_tbl_data0 (column name/field_name)
-    err_return = db_search_table_rowdata_allfields(file_name, db_table_name, db_tbl_data4, db_tbl_data0, db_search_string2, number_columns, &ret_array_length2);
+    err_return = db_search_table_rowdata_allfields(file_name, db_table_name, db_tbl_data4, db_tbl_data0, db_search_string2, number_columns, number_rows_ret, &ret_array_length2);
     if (err_return == 0)
         {
         printf("Could not retrieve table %s search data from %s.\n", db_table_name, file_name);
@@ -1007,7 +1064,7 @@ int main(int argc, char *argv[])
 
     // Print returned search result.
     printf("Table ALL column search data:\n");
-    // Print returned search result (actuall number search rows found).
+    // Print returned search result (actual number search rows found).
     printf("Array length = %d\n", ret_array_length2);
     for( i = 0; i < ret_array_length2; i++)
         {
@@ -1034,7 +1091,8 @@ int main(int argc, char *argv[])
 //==============================================================================
 // START Multiple types examples.
 
-    // Creae a table and field for binary BLOBS
+   /*
+    // Create a table and field for binary BLOBS
     char *db_table_namex = "DATA_Blobs";  // Table with single column BLOB
     // Test data.
     unsigned char bin_data[16] = {0xff, 0xd8, 0xff, 0xe2, 0x02, 0x1c, 0x49, 0x43, 0x43, 0x5f, 0x50, 0x52, 0x4f, 0x46, 0x49, 0x4c};
@@ -1084,9 +1142,11 @@ int main(int argc, char *argv[])
         printf("There was an unknown error.\n");
         }
     printf("===========================================\n");
+    */
 
     //==========================================================================
 
+    /*
     //int bin_data_len = 16;
     // Get number of columns in a named table.
     int number_cols_retx = 0;
@@ -1149,19 +1209,19 @@ int main(int argc, char *argv[])
 
     //int j = 0, i = 0;
     // To use the type tagVARIANT
-    // Static array version initialized to NULL, 0
+    // Static array version initialised to NULL, 0
     // tagVARIANT variant_array[3][10] = { .type = 0, { .vval = NULL, .ival = 0, .rval = 0.0, .tval = '\0', .bval = 0}};  // static arary of 3 * 10 tagVARIANT
 
-    // NOTE: SQLite3 does have it's own internal typless data structure Mem.
+    // NOTE: SQLite3 does have it's own internal typeless data structure Mem.
     // typedef struct Mem Mem;
     // It is an extremely complex data structure that includes many other data
-    // structures defined in the sqlite source. Also it is predomenently used
+    // structures defined in the sqlite source. Also it is predominantly used
     // with the sqlite3_value/_* set of API functions.
     // typedef struct sqlite3_value sqlite3_value;
     // It is more convenient to create our own tag struct, union or linked list
     // for the following example.
 
-    // We will have to intitialize/assign the dynamic array in a for loop.
+    // We will have to initialise/assign the dynamic array in a for loop.
     // Get these values from int *ret_number_columns, int *ret_number_rows
     // Elements should be the same size as variant_array_len0 unless we
     // purposefully create an array larger then the number of rows in the table.
@@ -1183,7 +1243,7 @@ int main(int argc, char *argv[])
         variant_array[i] = (tagVARIANT *) malloc(variant_array_collen * sizeof(tagVARIANT));  // 10 -> variant_array_collen
         }
 
-    // Initialize with zero values. (Later values will be assigned to each element)
+    // Initialise with zero values. (Later values will be assigned to each element)
     // Note: The char/byte lengths are currently static with a MAX length
     // of 30720 bytes. For larger strings or byte arrays change the tagVARIANT
     // structure declaration to *tval, and *bdata.
@@ -1193,7 +1253,7 @@ int main(int argc, char *argv[])
         {
         for(j = 0; j < variant_array_collen; j++)
             {
-            variant_array[i][j].type = 0;  // 
+            variant_array[i][j].type = 0;  //
             variant_array[i][j].value.vval = NULL;
             variant_array[i][j].value.ival = 0;
             variant_array[i][j].value.rval = 0.0;
@@ -1279,7 +1339,7 @@ int main(int argc, char *argv[])
                 case IS_BLOB:
                     // Do stuff for BLOB, using variant_array[n].value.bvar
                     // C cannot determin the length of a binary (byte) array, so
-                    // the length of array must always be tracked seperately.
+                    // the length of array must always be tracked separately.
                     bdata_len2 = variant_array[j][i].value.bval.blen;
                     // Debug test.
                     printf("byte len = %d\n", bdata_len2);
@@ -1314,9 +1374,9 @@ int main(int argc, char *argv[])
                     int return_memcmp = memcmp( bin_data, variant_array[j][i].value.bval.bdata, bdata_len2);
                     printf("memcmp= %d\n", return_memcmp);
                     if (0 == memcmp( bin_data, variant_array[j][i].value.bval.bdata, bdata_len2))
-                    {
+                        {
                         printf("BLOB data is the same as the original.\n");
-                    }
+                        }
 
                     // Sql Hex entry. Use SQLite DB manager to confirm.
                     //0000  ff d8 ff e2 02 1c 49 43 43 5f 50 52 4f 46 49 4c  ......ICC_PROFIL
@@ -1340,12 +1400,14 @@ int main(int argc, char *argv[])
     free(variant_array);
 
     printf("===========================================\n");
+    */
 
 //=============================================================================
-    // Test our original "Hrs_worked_Tracker" TEXT table with retreive all data types.
+    /*
+    // Test our original "Hrs_worked_Tracker" TEXT table with retrieve all data types.
     // This if from the first TEXT only table examples.
 
-    // Retrive current table name and column number.
+    // Retrieve current table name and column number.
 
     char *db_table_namex2 = "Hrs_worked_Tracker";
 
@@ -1370,7 +1432,7 @@ int main(int argc, char *argv[])
 
     printf("===========================================\n");
 
-    // Retrive current table rows number.
+    // Retrieve current table rows number.
     //int number_rows_retx = 0;  // Previously defined.
     number_rows_retx = 0;
     err_return = db_get_table_number_rows(file_name, db_table_namex2, &number_rows_retx);
@@ -1392,7 +1454,7 @@ int main(int argc, char *argv[])
     printf("===========================================\n");
 
 
-    // retreieve all table data ("Hrs_worked_Tracker")
+    // Retrieve all table data ("Hrs_worked_Tracker")
     // Previously defined int variant_array_rowlen;int variant_array_collen
     variant_array_rowlen = number_rows_retx;  // Always check the most recent number of rows in the table
     variant_array_collen = number_cols_retx + 1;  // The number of columns + 1 for rowid
@@ -1405,13 +1467,14 @@ int main(int argc, char *argv[])
     // Create 2D dynamic array using number rows and columns
     // tagVARIANT structure is declared in example_sql3.h
     //tagVARIANT **variant_array = NULL;
+    // Check if name variant_array is being redefined after free()
     variant_array = (tagVARIANT **) malloc(variant_array_rowlen * sizeof(tagVARIANT*));
     for(i = 0; i < variant_array_rowlen; i++)
         {
         variant_array[i] = (tagVARIANT *) malloc(variant_array_collen * sizeof(tagVARIANT));  // 10 -> variant_array_collen
         }
 
-    // Initialize with zero values. (Later values will be assigned to each element)
+    // Initialise with zero values. (Later values will be assigned to each element)
     // Note: The char/byte lengths are currently static with a MAX length
     // of 30720 bytes. For larger strings or byte arrays change the tagVARIANT
     // structure declaration to *tval, and *bdata.
@@ -1545,13 +1608,14 @@ int main(int argc, char *argv[])
     free(variant_array);
 
     printf("===========================================\n");
+    */
 
     //========================================================================<<
 
-
     //========================================================================>>
-    // ====>> Do insert and retreive from mixed data types table. ===========>>
+    // ====>> Do insert and retrieve from mixed data types table. ===========>>
 
+    /*
     // You will need this table name available to all of the following examples.
     char *db_table_mixed = "DATA_Mixed";  // Table with mixed data types.
     char sql_table_fields[1024] = {'\0'};
@@ -1610,10 +1674,10 @@ int main(int argc, char *argv[])
         // Create a dynamic array of size chars_Total.
         bin_avatar = (unsigned char*)malloc(chars_Total * sizeof(unsigned char));
         if (bin_avatar != NULL)
-           {
-           // Read the binary data into the array.
-           fread(bin_avatar, sizeof(unsigned char), chars_Total, fp_tux);
-           }
+            {
+            // Read the binary data into the array.
+            fread(bin_avatar, sizeof(unsigned char), chars_Total, fp_tux);
+            }
 
         fclose(fp_tux); // Close the file.
         }
@@ -1629,7 +1693,7 @@ int main(int argc, char *argv[])
 
     // Converting from 8bit byte(int) (2 * oct) to char required 2 * bytes + 1 for string terminator '\0'.
     // This will create a string of hex pairs 'ffb623 ...'.
-    // SQLite requires the string formated as The x'ffb623 ...' the x will be
+    // SQLite requires the string formatted as The x'ffb623 ...' the x will be
     // added when creating the query.
     char hex_buffer[4] = {'\0'};
     char *bin_avatar_hexstr = (char*)malloc((2 * chars_Total +1) * sizeof(char));
@@ -1637,13 +1701,13 @@ int main(int argc, char *argv[])
     for ( i = 0; i < chars_Total; i++)
         {
         sprintf(hex_buffer, "%02x", bin_avatar[i]);  // Convert byte to hex.
-        strcat(bin_avatar_hexstr, hex_buffer);  // add exch hex to string.
+        strcat(bin_avatar_hexstr, hex_buffer);  // add each hex to string.
         }
     // DEBUG print hex string.
     //printf("\nHex string:\n");
     //printf("%s\n", bin_avatar_hexstr);
 
-    free(bin_avatar);  // Clear the first read buffer.
+    free(bin_avatar);  // Clear the first read buffer from file read.
 
 
     // The following method inserts the data as part of the query statement.
@@ -1654,7 +1718,7 @@ int main(int argc, char *argv[])
     // TEXT == YYYY-MM-DD HH:MM:SS == datetime( ... ) (default)
     // https://www.sqlite.org/lang_datefunc.html
     // If you need Date and Time functions outside of sqlite use the C <time.h>
-    // functions. The date time will need to be formated using sprintf() to match
+    // functions. The date time will need to be formatted using sprintf() to match
     // with the ISO date format YYYY-MM-DD HH:MM:SS.
 
 
@@ -1662,7 +1726,7 @@ int main(int argc, char *argv[])
     // must be prefixed with 'x'  x'ffb623'.
     // The beter and safer way is to use ? placeholder and sqlite3_bind_* API.
 
-    // Note that this proccess is a little more complicated than python due to
+    // Note that this process is a little more complicated than python due to
     // the need for dynamic arrays and data conversions.
 
     // Add additional 1024 buffer space for the query statement.
@@ -1707,11 +1771,12 @@ int main(int argc, char *argv[])
 
     free(bin_avatar_hexstr);
     printf("===========================================\n");
+    */
 
-    
 
     //=========================================================================
-    
+
+    /*
     // Retrive the previously inserted mixed data types.
 
     // Get number of columns in a named table.
@@ -1773,7 +1838,7 @@ int main(int argc, char *argv[])
         variant_array[i] = (tagVARIANT *) malloc(variant_array_collen * sizeof(tagVARIANT));  // 10 -> variant_array_collen
         }
 
-    // Initialize with zero values. (Later values will be assigned to each element)
+    // Initialise with zero values. (Later values will be assigned to each element)
     // Note: The char/byte lengths are currently static with a MAX length
     // of 30720 bytes. For larger strings or byte arrays change the tagVARIANT
     // structure declaration to *tval, and *bdata.
@@ -1852,11 +1917,11 @@ int main(int argc, char *argv[])
                 case IS_BLOB:
                     // Do stuff for BLOB, using variant_array[n].value.bvar
                     // C cannot determin the length of a binary (byte) array, so
-                    // the length of array must always be tracked seperately.
+                    // the length of array must always be tracked separately.
                     bdata_len2 = variant_array[j][i].value.bval.blen;
                     // Debug test.
                     printf("byte len = %d\n", bdata_len2);
-                    /*
+                    /
                     printf("BLOB = {");
                     for(x = 0; x < bdata_len2; x++)
                         {
@@ -1864,7 +1929,7 @@ int main(int argc, char *argv[])
                         printf("%d,", variant_array[j][i].value.bval.bdata[x]);  // As decimal.
                         }
                     printf("\b}\n");  // '\b' is a backspace to remove the last ','
-                    */
+                    /
                     printf("BLOB = {");
                     for(x = 0; x < bdata_len2; x++)
                         {
@@ -1892,6 +1957,8 @@ int main(int argc, char *argv[])
         }
     free(variant_array);
     printf("===========================================\n");
+    */
+
 //============================================================================<<
 
     return 0;

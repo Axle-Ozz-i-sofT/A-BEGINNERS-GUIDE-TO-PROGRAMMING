@@ -168,6 +168,8 @@
 // Revise db_insert_table_rowdata_rowid() for error handling while loop.
 //
 // Check array off by 1s.
+// db_insert_table_rowdata_rowid() Fails with non contiguous rowids. Get next
+// rowid rather than using 1 to n rowid numbers.
 //------------------------------------------------------------------------------
 
 #ifndef EXAMPLE_SQL3_H
@@ -180,9 +182,9 @@
 //#include <math.h>
 //#include <conio.h>
 // Windows APIs are a limited subset of UNIX. aka UNIX APIs do not always
-// have an mscrt equivilent capability. Some features of UNIX are available
-// using UNIX emulation layers such as QT, MSYS2 amd WSL. These UNIX subsystems
-// require a slightly diferent standard library tool chain (headers.h) as well
+// have an mscrt equivalent capability. Some features of UNIX are available
+// using UNIX emulation layers such as QT, MSYS2 and WSL. These UNIX subsystems
+// require a slightly different standard library tool chain (headers.h) as well
 // as the subsystem shared objects to be available, but don't provide a direct
 // conversion from UNIX. Note that the UNIX subsystem libraries are quite large
 // and often introduce unnecessary overheads on Windows, so it is better to
@@ -296,11 +298,13 @@ int db_delete_table_rowdata(char *db_file_name, char *db_row_entry);
 // List all rows to array as array[rowid][row data as csv]
 int db_list_table_rows_data(char *db_file_name, char *db_table_name, char **db_tbl_data, int number_columns);
 
+// Test if rowid exist in a table.
+int db_table_rowid_exists(char *db_file_name, char *db_table_name, int tbl_rowid);
 // delete row by "rowid". Following rows will all shift -1 rowid.
 int db_delete_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql_rowid);
-// update/replace by rowid. Relpace an existing ebtry in place.
+// update/replace by rowid. Replace an existing ebtry in place.
 int db_replace_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql_rowid, char *db_field_names, char *db_field_values);
-// insert to rowid (all previous and following data moved down one rowid).
+// insert to rowid (all previous and following data moved down one rowid) (Not recommended).
 int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql_rowid, char *db_field_names, char *db_field_values, int number_columns,int number_rows);
 // read row from rowid
 int db_read_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql_rowid, char *db_tbl_rowid_data, int number_columns);
@@ -309,7 +313,7 @@ int db_read_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql
 // Search TableName by field/column Name using search word. Returns array of rows found (prefixed with rowid).
 int db_search_table_rowdata_byfield(char *db_file_name, char *db_table_name, char **db_tbl_row_search, char *field_name, char *db_search_string, int number_columns, int *ret_array_length);
 // Search TableName by ALL field/column Name using search word. Return array of rows found (prefixed with rowid). aka full table search
-int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, char **db_tbl_row_search, char **db_tbl_col_name, char *db_search_string, int number_columns, int *ret_array_length);
+int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, char **db_tbl_row_search, char **db_tbl_col_name, char *db_search_string, int number_columns, int number_rows, int *ret_array_length);
 
 // This is the final and more advanced SQLite3 query using multiple data types VARIANT.
 // I have used a binary BLOB entry for the example.
@@ -357,7 +361,7 @@ int sqlite3_get_version2(char *ret_version)
     // return_code is the return error codes.
     // Note: :memory: can be used instead of a file for temporary database
     // operations.
-    // defualts to: [SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE]
+    // defaults to: [SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE]
     return_code = sqlite3_open(db_filename_ram, &p_db);  // Open Memory (RAM) data base.
     if (return_code != SQLITE_OK)  // int 0
         {
@@ -473,8 +477,8 @@ int db_file_exists(char *db_file_name)
         while(char_buffer != EOF)
             {
             char_buffer = fgetc(fp);
-            // The SQLite 3 header is exacly 100 (0 - 99) bytes long imediately followed
-            // by a newline char '\n' == Dec 13 == LF at 101 charcters.
+            // The SQLite 3 header is exactly 100 (0 - 99) bytes long immediately followed
+            // by a newline char '\n' == Dec 13 == LF at 101 characters.
             if((char_buffer == '\n') ||(char_buffer == '\r') || (cnt_chr > 105))// Test if we have encountered a new line and,
                 {
                 break;
@@ -500,7 +504,7 @@ int db_file_exists(char *db_file_name)
     else
         {
         // Test if the string == "SQLite format 3". If true it should be a
-        // genuine SQLite 3 databse file.
+        // genuine SQLite 3 database file.
         char *search = "SQLite format 3";
         if (strstr(header, search) == NULL)  // NULL == 0 (type char*)
             {
@@ -552,7 +556,7 @@ int db_file_create(char *db_file_name)
 
     // This is a single query terminated by the ';' semi colon.
     // Multiple statements such as the following must be prepared, stepped and
-    // finalized individually.
+    // finalised individually.
     // char *sql = "CREATE TABLE IF NOT EXISTS Temp_table(ID INT);"
     //             "DROP TABLE IF EXISTS Temp_table;";
     char *sql1 = "CREATE TABLE IF NOT EXISTS Temp_table(ID INTEGER);";
@@ -683,7 +687,7 @@ int db_file_delete(char *db_file_name)
     return_code = S_getchar();
     if (( return_code == 'y') || ( return_code == 'Y'))
         {
-            
+
         return_code = remove(db_file_name);
         if(return_code == 0)
             {
@@ -732,19 +736,19 @@ int db_table_exists(char *db_file_name, char *db_table_name)
 
 // List all table names <- New function
 // !! Recheck with the following !!!
-    /*
-        const char* sql_table_list = "SELECT name FROM sqlite_master WHERE type='table'";
+   /*
+    const char* sql_table_list = "SELECT name FROM sqlite_master WHERE type='table'";
 
-        return_code = sqlite3_prepare_v2(p_db, sql_table_list, strlen(sql_table_list), &statement, NULL);
-        if(return_code == SQLITE_OK)
+    return_code = sqlite3_prepare_v2(p_db, sql_table_list, strlen(sql_table_list), &statement, NULL);
+    if(return_code == SQLITE_OK)
+        {
+        // Loop through all the tables
+        while(sqlite3_step(statement) == SQLITE_ROW)
             {
-            // Loop through all the tables
-            while(sqlite3_step(statement) == SQLITE_ROW)
-                {
-                if(!strcmp((const char*) sqlite3_column_text(statement, 0), table_name))
-                    return true;
-                }
+            if(!strcmp((const char*) sqlite3_column_text(statement, 0), table_name))
+                return true;
             }
+        }
     */
 
     // ##### This may need a loop!!!!
@@ -1599,6 +1603,107 @@ int db_list_table_rows_data(char *db_file_name, char *db_table_name, char **db_t
     }
 
 
+// Test if rowid exist in a table.
+int db_table_rowid_exists(char *db_file_name, char *db_table_name, int tbl_rowid)
+    {
+    sqlite3 *p_db;  // database handle (structure).
+    sqlite3_stmt *p_stmt;  // structure represents a single SQL statement
+    //const char *data = NULL;
+    int return_code = 0;
+    int err_ret = 0;
+
+    return_code = sqlite3_open_v2( db_file_name, &p_db, SQLITE_OPEN_READONLY, NULL );
+    if ( return_code != SQLITE_OK)
+        {
+        // Note: these print returns can be commented out if only the Bool return 0; is required.
+        fprintf(stderr, "Can't open database: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        sqlite3_close( p_db );
+        return -1;
+        }
+
+    char sql_concat[512] = {'\0'};  // temp buffer [MAX 128 characters]
+    char rowid_buffer[24] = {'\0'};  // convert int to char for statement concat.
+    // Clear the buffer from the last statement. strcat() will concat on to
+    // the previous statement otherwise.
+    strcpy(sql_concat, "");
+
+    sprintf(rowid_buffer, "%d", tbl_rowid); // convert rowid int to string.
+
+    // SELECT EXISTS(SELECT 1 FROM myTbl WHERE WHERE rowid = tbl_rowid);
+    // "SELECT rowid, * FROM "
+
+    // Both of the following queries will return a correct result.
+    char *sql1 = "SELECT EXISTS(SELECT 1 FROM ";
+    char *sql2 = " WHERE rowid = ";
+    char *sql3 = ");";
+
+    //char *sql1 = "SELECT Count() FROM ";
+    //char *sql2 = " WHERE rowid = ";
+    //char *sql3 = ";";
+
+    strcat(sql_concat, sql1);  // Add SQL query statement.
+    strcat(sql_concat, db_table_name);  // Add SQL query statement.
+    strcat(sql_concat, sql2);  // Add SQL query statement.
+    strcat(sql_concat, rowid_buffer);  // Add SQL query statement.
+    strcat(sql_concat, sql3);
+
+    // We can only send one query at a time to sqlite3.
+    return_code = sqlite3_prepare_v2(p_db, sql_concat, -1, &p_stmt, 0);
+    // On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
+    // is returned.
+    if (return_code != SQLITE_OK)
+        {
+        // This is error handling code for the sqlite3_prepare_v2 function call.
+        fprintf(stderr, "Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        sqlite3_close(p_db);
+        return -1;
+        }
+
+    return_code = sqlite3_step( p_stmt );  // run once for one statement
+    if (return_code != SQLITE_ROW)  // SQLITE_DONE==101, SQLITE_ROW==100
+        {
+        fprintf(stderr, "Step failed: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        sqlite3_close(p_db);
+        return -1;
+        }
+
+    return_code = sqlite3_column_int(p_stmt, 0);
+    if (return_code == 0)
+        {
+        err_ret = 0;
+        }
+    else  // ==1
+        {
+        err_ret = 1;
+        }
+
+    //sqlite3_bind_*()  // After sqlit3_prepare_v2()
+    //sqlite3_clear_bindings(p_stmt);
+
+    // The sqlite3_finalize function destroys the prepared statement object.
+    return_code = sqlite3_finalize( p_stmt );  // Commit to the database.
+    if (return_code != SQLITE_OK)  // SQLITE_OK==0
+        {
+        // This is error handling code.
+        fprintf(stderr, "Failed to finalize data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        sqlite3_close(p_db);
+        return -1;
+        }
+
+    // The sqlite3_close function closes the database connection.
+    return_code = sqlite3_close(p_db);   // SQLITE_OK==0
+    if (return_code != SQLITE_OK)
+        {
+        // This is error handling code. NOTE! As p_db is closed the error code may not be available!
+        fprintf(stderr, "Failed to close database: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+        sqlite3_close(p_db);
+        return -1;
+        }
+
+    return err_ret;
+    }
+
+
 // delete row by "rowid"
 // Delete the row data by rowid.
 int db_delete_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql_rowid)
@@ -1795,10 +1900,17 @@ int db_replace_table_rowdata_rowid(char *db_file_name, char *db_table_name, int 
     return 1;
     }
 
-// !!! Note: This function currently failas on non contiguous rowid !!!
-// I will update and correct soon.
+
+// Insert row data into a named table at rowid. (Not recommended)
+// I had some issues with non contiguous rowid numbers. I have created a test
+// flag to skip empty rowid. Empty row id remain unchanged and all other
+// filled rows are moved down one slot. This is a bit hackish and not the
+// best method. We could use VACUUM to make the rowid index contiguous before
+// each routine requiring rowid manipulation, or we can copy the table to
+// a memory file with contiguous rowid, or last copy the enter table to our
+// application memory and perform the table tasks there before re-writing
+// the table fresh.
 //
-// Insert row data into a named table at rowid.
 // The current data at the rowid is written into a temporary buffer, the new row
 // data is then written to that rowid.
 // Each row is "shuffled" down one rowid at at time until the last rowid.
@@ -1819,8 +1931,14 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
     sqlite3 *p_db;  // database handle (structure).
     sqlite3_stmt *p_stmt;  // structure represents a single SQL statement
     //const char *data = NULL;
-    int return_code = 0;
+    int return_code = 0;  // Error and return codes.
+    // Test and skip missing rowid between read buffer and write buffer.
+    // It's a bit messy and complicated :/
+    int step_ret = 0;  // Used for flags in missing rowid.
     int Count_Rows = sql_rowid;  // start counting from the first insert rowid.
+    int test_rowid = 0;  // Used for flags in missing rowid.
+    int W_Flag = 0;  //  Used for flags in missing rowid.
+
 
     char buffer[128] = {'\0'};  // Temp column read buffer [MAX 128 characters]
     // This 2 dimension array will hold the temporary data for the rows being read
@@ -1846,7 +1964,7 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
     while (Count_Rows < number_rows +2)
         {
 
-//===================================================== Start step 1 read rowid
+        //================================================= Start step 1 read rowid
         // rowid copy to string
         sprintf(rowid_buffer, "%d", sql_rowid); // convert int to str
 
@@ -1859,8 +1977,11 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
             //buffer with an empty string with "" for each read iteration.
             strcpy(sql_concat, "");
             // "SELECT rowid, * FROM "  // Note that I am ignoring the rowid
-            char *sql1 = "SELECT * FROM ";  // Note the space after FROM
-            char *sql2 = " WHERE rowid =  ";  //
+            // I need to work from rowid to reorganise the table.
+
+            //char *sql1 = "SELECT * FROM ";  // Note the space after FROM
+            char *sql1 = "SELECT rowid, * FROM ";  // Note the space after FROM
+            char *sql2 = " WHERE rowid = ";  //
             char *sql3 = ";";  //
 
             strcat(sql_concat, sql1);  // Add SQL query statement.
@@ -1876,7 +1997,7 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
             if (return_code != SQLITE_OK)
                 {
                 // This is error handling code for the sqlite3_prepare_v2 function call.
-                fprintf(stderr, "Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+                fprintf(stderr, "Read, Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
                 sqlite3_close(p_db);
                 return -1;
                 }
@@ -1885,19 +2006,17 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
             // All of the data is collected in a single string with each column
             // separated with the ',' delimiter.
 
-            // ### This needs to be revised for error handling ###
-            // I may need to change this to while (1) and
-            // if (return_code == SQLITE_ROW){}
-            //else if (return_code == SQLITE_DONE || return_code == SQLITE_DONE){ break;}
-            // else {error return;}
-            while (sqlite3_step(p_stmt) == SQLITE_ROW)
-                //while (1)
+            // This while isn't required as step only retrieves a single row.
+            //while (sqlite3_step(p_stmt) == SQLITE_ROW)
+            step_ret = sqlite3_step(p_stmt);
+
+            test_rowid = sqlite3_column_int(p_stmt, 0);
+            if (( test_rowid != 0) || (step_ret == SQLITE_ROW))
                 {
-                //return_code = sqlite3_step(p_stmt);
-                //if (return_code == SQLITE_ROW)
-                //{
+                W_Flag = 0;  // Reset the wite flag if rowid has an entry.
                 // Can use sqlite3_column_count(statement/p_stmt) in place of number_columns.
-                for (int i = 0; i < number_columns; i++)  // Count 0 to number_columns-1
+                // Changed to i = 1 to number_columns +1. The first rowid column is skipped.
+                for (int i = 1; i < number_columns +1; i++)  // Count 0 to number_columns-1
                     {
                     // To handle the return of NULL pointers as a string
                     // data = (const char*)sqlite3_column_text( p_stmt, i );
@@ -1906,36 +2025,121 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
 
                     // Copy each entry to a buffer. Each entry is a col.
                     strcpy(buffer, (const char*)sqlite3_column_text(p_stmt, i));  // i == array column.
-                    //printf("Value: %s\n", buffer);  // DEBUG
+
                     // concat buffer to our return array.
                     // Here we are reading the row into [1] of the temporary R/W buffer.
                     strcat(db_field_values_temp[1], "\"");
                     strcat(db_field_values_temp[1], buffer);
                     strcat(db_field_values_temp[1], "\"");
-                    if (i < number_columns -1) // Don't add ', ' after last column.
+                    if (i < number_columns +1 -1) // Don't add ', ' after last column.
                         {
                         strcat(db_field_values_temp[1], ",");  // add separator token between each col.
                         }
-                    else  // Add line return, end of row.
-                        {
-                        ;  //strcat(db_tbl_rowdata[cnt_row], "\n");
-                        }
+
                     }
-                //}
-                //else if ((return_code == SQLITE_DONE) || (return_code == SQLITE_OK))  // ???? SQLITE_OK
-                //    {
-                // No more rows to read, but we need to write the last row at this rowid!
-                //send flag or continue past sqlite3_finalize.
-                //    Flag_More_Rows = 0;
-                //    break;
-                //    }
-                //else
-                //    {
-                // Unknown error!!!
-                // Create error return code!
-                //Flag_More_Rows = 0;
-                //    break;
-                //    }
+
+                }
+            else
+                {
+                // Skip read data on empty rowid.
+                W_Flag++;  // Flag to write last line. Can use test_rowid instead.
+                number_rows++;  // Correct the total row count to match last system rowid
+                }
+
+            //sqlite3_bind_*()  // After sqlit3_prepare_v2()  // DEBUG
+            //sqlite3_clear_bindings(p_stmt);  // DEBUG
+
+            // The sqlite3_finalize function destroys the prepared statement object.
+            return_code = sqlite3_finalize( p_stmt );  // Commit to the database.
+            if (return_code != SQLITE_OK)  // SQLITE_OK==0
+                {
+                // This is error handling code.
+                fprintf(stderr, "Failed to finalize data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+                sqlite3_close(p_db);
+                return -1;
+                }
+
+            }  // END Skip reading +1 empty line
+        //=========================================================== end step 1
+        //================================================ Start step 2. Write rowid
+
+        if (W_Flag < 1)  // Skip writing empty buffer data.
+            {
+            // Clear the buffer from the last statement. strcat() will concat on to
+            // the previous statement otherwise.
+            strcpy(sql_concat, "");
+
+            char *sql01a = "REPLACE INTO ";  //
+            char *sql01b = "INSERT INTO ";  //
+            char *sql02a = " (rowid, ";  //
+            char *sql02b = " (";  //
+            char *sql03 = ") VALUES(";  //
+            char *sql04 = ",";  // SQL as integer
+            char *sql05 = ");";
+
+            // Some logic to handle the last row inserted to a new rowid.
+            if (Count_Rows < number_rows +2)
+                {
+                strcat(sql_concat, sql01a);  // "REPLACE INTO "
+                }
+            else  // New row (original last row +1)
+                {
+                strcat(sql_concat, sql01b);  // "INSERT INTO "
+                }
+
+            strcat(sql_concat, db_table_name);  // Add table name to statement.
+
+            if (Count_Rows < number_rows +2)
+                {
+                strcat(sql_concat, sql02a);  // " (rowid, "
+                }
+            else
+                {
+                strcat(sql_concat, sql02b);  // " ("
+                }
+
+            strcat(sql_concat, db_field_names);  // Add field name (column name).
+
+            if (Count_Rows < number_rows +2)
+                {
+                strcat(sql_concat, sql03);  // ") VALUES(\""
+                strcat(sql_concat, rowid_buffer);  // This is the fist rowid for new values [As SQL INTEGER]
+                strcat(sql_concat, sql04);  // delimit rowid, col_values, ...
+                }
+            else
+                {
+                strcat(sql_concat, sql03);  // ") VALUES("
+                }
+
+            // Add the last row read into the same rowid
+            strcat(sql_concat, db_field_values_temp[0]);  // Add the values.
+            strcat(sql_concat, sql05);  // Finish the statement with ");"
+
+
+            // We can only send one query at a time to sqlite3.
+            return_code = sqlite3_prepare_v2(p_db, sql_concat, -1, &p_stmt, 0);
+            // On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
+            // is returned.
+            if (return_code != SQLITE_OK)
+                {
+                // This is error handling code for the sqlite3_prepare_v2 function call.
+                fprintf(stderr, "Write, Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+                sqlite3_close(p_db);
+                return -1;
+                }
+
+            // The sqlite3_step runs the SQL statement. SQLITE_ROW return code indicates
+            // that there is another row ready. Our SQL statement returns only one row
+            // of data at a time, therefore, we call this function only once at a time.
+            // If we are writing or reading multiple lines of table then we will need to
+            // use sqlite3_step() in a loop until end of SQLITE_ROW or SQLITE_DONE.
+            return_code = sqlite3_step( p_stmt );  // run once for one statement
+            //    while( sqlite3_step( p_stmt ) == SQLITE_ROW ) {;}
+            if (return_code != SQLITE_DONE)  // SQLITE_DONE==101, SQLITE_ROW==100
+                {
+                fprintf(stderr, "Step failed: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+                sqlite3_close(p_db);
+                return 0;
                 }
 
             //sqlite3_bind_*()  // After sqlit3_prepare_v2()
@@ -1951,108 +2155,18 @@ int db_insert_table_rowdata_rowid(char *db_file_name, char *db_table_name, int s
                 return -1;
                 }
 
-            }  // END Skip reading +1 empty line
-//=============================================================== end step 1
-//==================================================== Start step 2. Write rowid
+            // Copy the last read [1] back to position [0] for next read write cycle.
+            // This works a little like a last in first out buffer (LIFO).
+            strcpy( db_field_values_temp[0], db_field_values_temp[1]);
 
-        // Clear the buffer from the last statement. strcat() will concat on to
-        // the previous statement otherwise.
-        strcpy(sql_concat, "");
-
-        char *sql01a = "REPLACE INTO ";  //
-        char *sql01b = "INSERT INTO ";  //
-        char *sql02a = " (rowid, ";  //
-        char *sql02b = " (";  //
-        char *sql03 = ") VALUES(";  //
-        char *sql04 = ", ";  // SQL as integer
-        char *sql05 = ");";
-
-        // Some logic to handle the last row inserted to a new rowid.
-        if (Count_Rows < number_rows +2)
-            {
-            strcat(sql_concat, sql01a);  // "REPLACE INTO "
-            }
-        else  // New row (original last row +1)
-            {
-            strcat(sql_concat, sql01b);  // "INSERT INTO "
             }
 
-        strcat(sql_concat, db_table_name);  // Add table name to statement.
-
-        if (Count_Rows < number_rows +2)
-            {
-            strcat(sql_concat, sql02a);  // " (rowid, "
-            }
-        else
-            {
-            strcat(sql_concat, sql02b);  // " ("
-            }
-
-        strcat(sql_concat, db_field_names);  // Add feild name (column name).
-
-        if (Count_Rows < number_rows +2)
-            {
-            strcat(sql_concat, sql03);  // ") VALUES(\""
-            strcat(sql_concat, rowid_buffer);  // This is the fist rowid for new values [As SQL INTEGER]
-            strcat(sql_concat, sql04);  // delimit rowid, col_values, ...
-            }
-        else
-            {
-            //printf("DEBUG 1\n");  // DEBUG
-            strcat(sql_concat, sql03);  // ") VALUES("
-            }
-
-        // Add the last row read into the same rowid
-        strcat(sql_concat, db_field_values_temp[0]);  // Add the values.
-        strcat(sql_concat, sql05);  // Finish the statement with ");"
-
-        // We can only send one query at a time to sqlite3.
-        return_code = sqlite3_prepare_v2(p_db, sql_concat, -1, &p_stmt, 0);
-        // On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
-        // is returned.
-        if (return_code != SQLITE_OK)
-            {
-            // This is error handling code for the sqlite3_prepare_v2 function call.
-            fprintf(stderr, "Failed to prepare data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
-            sqlite3_close(p_db);
-            return -1;
-            }
-
-        // The sqlite3_step runs the SQL statement. SQLITE_ROW return code indicates
-        // that there is another row ready. Our SQL statement returns only one row
-        // of data at a time, therefore, we call this function only once at a time.
-        // If we are writing or reading multiple lines of table then we will need to
-        // use sqlite3_step() in a loop until end of SQLITE_ROW or SQLITE_DONE.
-        return_code = sqlite3_step( p_stmt );  // run once for one statement
-        //    while( sqlite3_step( p_stmt ) == SQLITE_ROW ) {;}
-        if (return_code != SQLITE_DONE)  // SQLITE_DONE==101, SQLITE_ROW==100
-            {
-            fprintf(stderr, "Step failed: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
-            sqlite3_close(p_db);
-            return 0;
-            }
-
-        //sqlite3_bind_*()  // After sqlit3_prepare_v2()
-        //sqlite3_clear_bindings(p_stmt);
-
-        // The sqlite3_finalize function destroys the prepared statement object.
-        return_code = sqlite3_finalize( p_stmt );  // Commit to the database.
-        if (return_code != SQLITE_OK)  // SQLITE_OK==0
-            {
-            // This is error handling code.
-            fprintf(stderr, "Failed to finalize data: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
-            sqlite3_close(p_db);
-            return -1;
-            }
-
-        // Copy the last read [1] back to position [0] for next read write cycle.
-        // This works a little like a last in first out buffer (LIFO).
-        strcpy( db_field_values_temp[0], db_field_values_temp[1]);
         sql_rowid++;  // Start read/write next rowid..
         Count_Rows++;  // So we don't count past the existing rows in the table.
+        //============================================================== End step 2
 
-        }  // Continue loop until last table row.
-//================================================================== End step 2
+        }  // Continue loop until last table row. (while Count_Rows < number_rows(++) +2:)
+
 
     // The sqlite3_close function closes the database connection.
     return_code = sqlite3_close(p_db);   // SQLITE_OK==0
@@ -2078,7 +2192,6 @@ int db_read_table_rowdata_rowid(char *db_file_name, char *db_table_name, int sql
     sqlite3_stmt *p_stmt;  // structure represents a single SQL statement
     //const char *data = NULL;
     int return_code = 0;
-    //int Count_Rows = sql_rowid;  // start counting from the first insert rowid.
 
     char sql_concat[512] = {'\0'};  // temp buffer [MAX 512 characters]
     char buffer[128] = {'\0'};  // Temp column read buffer [MAX 128 characters]
@@ -2313,7 +2426,7 @@ int db_search_table_rowdata_byfield(char *db_file_name, char *db_table_name, cha
 // Duplicate row_id are filtered out.
 // This needs to be stepped through each column and filter for duplicate rowid.
 // ## Only for tables where all field types are TEXT (String) except rowid. ##
-int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, char **db_tbl_row_search, char **db_tbl_col_name, char *db_search_string, int number_columns, int *ret_array_length)
+int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, char **db_tbl_row_search, char **db_tbl_col_name, char *db_search_string, int number_columns, int number_rows, int *ret_array_length)
     {
 
     int cnt_col = 0;  // Counter to step though name of each column (field)
@@ -2334,6 +2447,15 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
     int row_id_exists = 0;
     char sql_concat[512] = {'\0'};  // Build sql query statement.
 
+    // The element array(n)[0] should not be empty for the tests, but will still work in C.
+    // Getting a warning that the db_search_string[i] is not a string, but works fine.
+    //char *delimiter = ",";
+    //for(i = 0; i < (number_rows); i++)
+    //    {
+    //    strcpy(db_tbl_row_search[i], delimiter);  // Check pointer?
+    //    }
+
+
     return_code = sqlite3_open_v2( db_file_name, &p_db, SQLITE_OPEN_READONLY, NULL );
     if ( return_code != SQLITE_OK)
         {
@@ -2348,6 +2470,8 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
     // This search routine will only work for tables with type TEXT!
 
     // Be careful of the + 1 in number_columns2 due to extra row_id column.
+    // rowid column is not counted when accessing the field names in the search.
+    // The return values from the search DO include the rowid.
     // ====> START Loop each column name (field).
     for(cnt_col = 0; cnt_col < number_columns2 -1; cnt_col++)
         {
@@ -2365,7 +2489,7 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
         strcat(sql_concat, sql1);  // Add SQL query statement.
         strcat(sql_concat, db_table_name);  // Add table name to statement.
         strcat(sql_concat, sql2);  // Add last part of query statement.
-        strcat(sql_concat, db_tbl_col_name[cnt_col]);  // Add feild name (column name) from db_tbl_col_name[][] array.
+        strcat(sql_concat, db_tbl_col_name[cnt_col]);  // Add field name (column name) from db_tbl_col_name[][] array.
         strcat(sql_concat, sql3);  // add " = "
         strcat(sql_concat, db_search_string);  // Add last part of query statement.
         strcat(sql_concat, sql4);  // Finish the statement with ";"
@@ -2401,7 +2525,7 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
                 strcpy(buffer, (const char*)sqlite3_column_text(p_stmt, i));  // i == array column.
 
                 //====> START Test for repeat row_id ====>
-                // This can be improved in eficiancy !!!!
+                // This can be improved in efficiency !!!!
                 // Do string compare test to see if the first column row_id
                 // already exists in our return search array. Skip copying that
                 // row if row_id already exists.
@@ -2417,7 +2541,7 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
                         // extract the first col item row_id up to token ','
                         while (1)
                             {
-                            ch = db_tbl_row_search[j][x];
+                            ch = db_tbl_row_search[j][x];  // ###### First col and',' is non existent in array!!!!!
                             if (ch != ',')
                                 {
                                 token_buf[x] = ch;  // copy int characters to the token buffer.
@@ -2439,6 +2563,10 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
                             // If True 0 then skip copying this row to db_tbl_row_search[].
                             row_id_exists = 1;
                             }
+                        //else
+                        //    {
+                        //    strcpy(db_tbl_row_search[cnt_row], "");  // Clear the ',' ready for strcat()
+                        //    }
                         }
                     }
                 //====> END Test for reapeat row_id ====>
@@ -2501,6 +2629,7 @@ int db_search_table_rowdata_allfields(char *db_file_name, char *db_table_name, c
     }
 
 //==============================================================================
+// START Multiple types examples.
 
 // Insert binary row data into a named table.
 // If the data already exists will create a new row.
@@ -2589,7 +2718,7 @@ int db_insert_table_rowdata_bin(char *db_file_name, char *db_tbl_entry, void *bi
 // NOTE: SQLite3 does have it's own internal typless data structure Mem.
 // typedef struct Mem Mem;
 // It is an extremely complex data structure that includes many other data
-// structures defined in the sqlite source. Also it is predomenently used
+// structures defined in the sqlite source. Also it is predominantly used
 // with the sqlite3_value/_* set of API functions.
 // typedef struct sqlite3_value sqlite3_value;
 // It is more convenient to create our own tag struct, union or linked list
@@ -2625,15 +2754,15 @@ int db_list_table_all_types(char *db_file_name, char *db_table_name, tagVARIANT 
         sqlite3_close( p_db );
         return -1;
         }
-        /*
+    /*
     return_code = sqlite3_open(db_file_name, &p_db);
     if ( return_code != SQLITE_OK)
-        {
-        // Note: these print returns can be commented out if only the Bool return 0; is required.
-        fprintf(stderr, "Can't open database: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
-        sqlite3_close( p_db );
-        return -1;
-        }
+    {
+    // Note: these print returns can be commented out if only the Bool return 0; is required.
+    fprintf(stderr, "Can't open database: %s | %d\n", sqlite3_errmsg(p_db), return_code);  // DEBUG
+    sqlite3_close( p_db );
+    return -1;
+    }
     */
 
     strcpy(sql_concat, "");
@@ -2689,10 +2818,11 @@ int db_list_table_all_types(char *db_file_name, char *db_table_name, tagVARIANT 
                     break;
                 case SQLITE_BLOB:
                     variant_structure[num_rows][i].type = IS_BLOB;
-                    // MAX 2048 bytes
+                    // MAX 2048 bytes (30719)
                     bytes_blob = sqlite3_column_bytes(p_stmt, i);
                     variant_structure[num_rows][i].value.bval.blen = bytes_blob;
                     //printf("Bytes_blob=%d\n", bytes_blob);  // DEBUG
+                    // We must use memcpy() or similar function for this.
                     memcpy(variant_structure[num_rows][i].value.bval.bdata, sqlite3_column_blob(p_stmt, i), bytes_blob);
                     //0000  ff d8 ff e2 02 1c 49 43 43 5f 50 52 4f 46 49 4c  ......ICC_PROFIL
                     break;
