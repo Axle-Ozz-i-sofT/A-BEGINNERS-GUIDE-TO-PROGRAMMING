@@ -31,10 +31,10 @@
 # Notes: basics_2.c ozz_sql3.h
 #
 # The examples are part of a small library ozz_sql3.h and are designed to
-# illustrate some of the basics of SQLite 3. They are not organized as and
+# illustrate some of the basics of SQLite 3. They are not organised as and
 # application and are designed to be rearranged, modified or used as a base
 # from which to create a small application. Some of the example calls have been
-# commented out to allow for the basic creation and reteival of some database
+# commented out to allow for the basic creation and retrieval of some database
 # tables. See ozz_sql3.h for a list of example functions and choose your
 # own arrangement for the test below, or alternatively create a small app
 # to accept user input and returns using the library functions.
@@ -45,7 +45,7 @@
 # Get the MAX length of Field Names?
 # Get the length of a column, row entry?
 # This is not a native API for sqlite, so a function would need to be created
-# to analyze each individual row/col entry. For now I am just using arbitrary
+# to analyse each individual row/col entry. For now I am just using arbitrary
 # static limits of [128, [512], [2048] <- you can increase them if needed.
 #
 # Check array off by 1s.
@@ -58,7 +58,7 @@
 # https://www.scaler.com/topics/python-ctypes/
 # https://solarianprogrammer.com/2019/07/18/python-using-c-cpp-libraries-ctypes/
 #
-# Special thanks for assistance with ctypes conversions, especialy the
+# Special thanks for assistance with ctypes conversions, especially the
 # sqlite3_column_blob() void* to Python Byte string conversions.
 # https://gist.github.com/michalc
 #------------------------------------------------------------------------------
@@ -79,8 +79,6 @@ def main():
     pass
 
     return_code = 0  # return codes and error codes returned from functions.
-
-
 
     ver_buffer = []  # empty list (strings are imutable when passed to a function in python).
     err_return = 0;
@@ -212,7 +210,7 @@ def main():
 
     ## Long version check with error returns.
     # Only lists and dictionaries are mutable. To return a value by reference
-    # (pseudo, as Python does not have varables or memory pointers, only objects)
+    # (pseudo, as Python does not have variables or memory pointers, only objects)
     # we need to use a list. We can use the first element list[0] as a string return
     # in a similar way to a pointer by reference to the original buffer.
     # Note that I am returning an integer via "return" and a string via arguments.
@@ -226,7 +224,7 @@ def main():
         else:
             print("Incorrect version!")
     else:  # err_return == -1
-        print("An internal error occured.")
+        print("An internal error occurred.")
     print("===========================================")
 
 
@@ -258,7 +256,7 @@ def main():
     elif err_return == 1:
         print(file_name + " successfully created." )
     else:  # err_return==0
-        print("An internal error occured.")
+        print("An internal error occurred.")
     print("===========================================")
 
     """
@@ -289,8 +287,8 @@ def main():
 
     ## !!!!!!! This has to be rechecked for correct return number_tables_ret !!!!
     ## Get the total number of tables in a named database file.
-    # Python can't pass object names by reference as they are imutable, so we
-    # we must use a list wich is mutable inside of a function. The List only
+    # Python can't pass object names by reference as they are immutable, so we
+    # we must use a list which is mutable inside of a function. The List only
     # has a single integer element for our value.
     number_tables_ret = [0]  # Variable to hold returned number of tables.
 
@@ -337,7 +335,7 @@ def main():
     # become an alias for rowid. You do not have to add an entry for the
     # INTEGER PRIMARY KEY column as SQLite3 will automatically add the value.
     # Note the C string line continuation character \
-    # Note: \ will throw a compiler warning as you can accidentaly comment out
+    # Note: \ will throw a compiler warning as you can accidentally comment out
     # the next line using the continuation char.
     # We can also use = "My long string "
     #                   "on 2 lines";
@@ -456,7 +454,7 @@ def main():
 
     ## Get number of columns in a named table.
     number_cols_ret = []  # Variable for the returned number of columns.
-    #int db_get_table_number_rows(char *db_file_name, char *db_table_name, int *number_rows);
+
     err_return = example_sql3.db_get_table_number_cols(file_name, db_table_name, number_cols_ret)
     if err_return == 0:
         print("Could not retrieve table " + db_table_name + " column number from " + file_name);
@@ -473,14 +471,14 @@ def main():
 
     ## Get number of rows in a named table.
     number_rows_ret = []  # Variable for the returned number of rows.
-    #int db_get_table_number_rows(char *db_file_name, char *db_table_name, int *number_rows);
+
     err_return = example_sql3.db_get_table_number_rows(file_name, db_table_name, number_rows_ret)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_name + " row number from " + file_name)
+        print("Could not retrieve table " + db_table_name + " row number from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_name + " row number from " + file_name)
     else:  # == -1
-        printf("There was an unknown error.\n");
+        print("There was an unknown error.\n");
 
     print("Table number of rows:" +str(number_rows_ret[0]))
 
@@ -489,9 +487,10 @@ def main():
     ## TODO
     # Get the MAX length of Field Names?
     # Get the length of a column, row entry?
-    # This is not a native API for sqlite, so a function would need to be created
-    # to analyze each individual row/col entry. For now I am just using arbitrary
+    # Aa function would need to be created to analyse each individual row/col
+    # entry. For now I am just using arbitrary
     # static limits of [128, [512], [2048] <- you can increase them if needed.
+    # see: sqlite3_column_bytes() to get the data length.
 
 
     ## Return an array of column names (fields).
@@ -500,7 +499,7 @@ def main():
 
     err_return = example_sql3.db_get_table_colnames(file_name, db_table_name, db_tbl_data0)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_name + " column names from " + file_name)
+        print("Could not retrieve table " + db_table_name + " column names from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_name + " column names from " + file_name)
     else:  # == -1
@@ -580,11 +579,11 @@ def main():
     #int db_get_table_number_rows(char *db_file_name, char *db_table_name, int *number_rows);
     err_return = example_sql3.db_get_table_number_rows(file_name, db_table_name, number_rows_ret)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_name + " row number from " + file_name)
+        print("Could not retrieve table " + db_table_name + " row number from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_name + " row number from " + file_name)
     else:  # == -1
-        printf("There was an unknown error.\n");
+        print("There was an unknown error.\n");
 
     print("Table number of rows:" +str(number_rows_ret[0]))
 
@@ -592,18 +591,34 @@ def main():
 
 
     ## TODO
-    # Tset get last rowid. Only works after a db table was opened and not
+    # Get last rowid. Only works after a db table was opened and not
     # yet closed.
     #int last_id = sqlite3_last_insert_rowid(db);
-    #printf("The last Id of the inserted row is %d\n", last_id);
+    #print("The last Id of the inserted row is %d\n", last_id);
 
 
     #========================================================================>>
 
+    # Test if rowid exist in a table.
+    tbl_rowid = 2
+
+    err_return = example_sql3.db_table_rowid_exists(file_name, db_table_name, tbl_rowid)
+    if err_return == 0:
+        print("Table " + db_table_name + " rowid does not exist.")
+    elif err_return == 1:
+        print("Table " + db_table_name + " rowid does exist.")
+    else:  # == -1
+        print("There was an unknown error.")
+
+    print("Rowid:" + str(tbl_rowid))
+
+    print("===========================================")
+
+
     """
     ## delete row by "rowid". This does not question or ask for confirmation!
     sql_rowid1 = 2
-    print("Numer of rows=" + str(number_rows_ret[0]))
+    print("Number of rows=" + str(number_rows_ret[0]))
     print("Delete row_id=" + str(sql_rowid1))
     #char *db_row_entry = "DELETE FROM Hrs_worked_Tracker WHERE rowid = 2;";
 
@@ -626,7 +641,7 @@ def main():
 
     """
     ## update/replace by rowid. This will replace/overwrite existing row data.
-    # This will replace the existing rowid or INDEX_ID with neww data for each
+    # This will replace the existing rowid or INDEX_ID with new data for each
     # column name assigned.
     # Alternative rowid, INDEX_ID
     # Note using INT/INTEGER with current function will fail!
@@ -695,7 +710,15 @@ def main():
 
 
     """
-    ## insert by rowid?
+    ## Insert row data into a named table at rowid. (Not recommended)
+    # I had some issues with non contiguous rowid numbers. I have created a test
+    # flag to skip empty rowid. Empty row id remain unchanged and all other
+    # filled rows are moved down one slot. This is a bit hackish and not the
+    # best method. We could use VACUUM to make the rowid index contiguous before
+    # each routine requiring rowid manipulation, or we can copy the table to
+    # a memory file with contiguous rowid, or last copy the enter table to our
+    # application memory and perform the table tasks there before re-writing
+    # the table fresh.
     # If rowid doesn't exist does not write.
     # Copies each row down 1 at a time to create space and new row at rowid in the table.
     # The new row is placed into the rowid using REPLACE INTO.
@@ -727,9 +750,11 @@ def main():
 
 
     ##Read row from rowid. returned as csv string.
+    ## Rowid must exist.
+    # I need to correct some error handling where rowid does not exist...
 
     db_table_name4 = "Hrs_worked_Tracker"
-    sql_rowid4 = 4
+    sql_rowid4 = 3
     # This can be obtained from db_get_table_colnames(). use concatenation to create the following string.
     #char *db_field_names3 = "Week, Employee_ID, Name, Monday, Tuesday, Wednesday, Thursday, Friday";
     #char *db_field_values3 = "\"2\", \"36\", \"Bill Knight\", \"2\", \"3\", \"4\", \"5\", \"6\"";
@@ -754,7 +779,7 @@ def main():
         print("csv_row_length characters=" + str(csv_row_length))
 
         # Split the string into a list of column values at ','. Note that we have
-        # recieved a single csv string in list element[0]. We are then using
+        # received a single csv string in list element[0]. We are then using
         # string slicing to split the string into a new list at the delimiter ','.
         list_buffer = db_tbl_rowid_data[0].split(',')
 
@@ -840,7 +865,7 @@ def main():
 
     err_return = example_sql3.db_search_table_rowdata_allfields(file_name, db_table_name, db_tbl_data4, db_tbl_data0, db_search_string2, number_columns, ret_array_length2)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_name + " search data from " + file_name)
+        print("Could not retrieve table " + db_table_name + " search data from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_name + " search data from " + file_name)
     else:  # == -1
@@ -848,7 +873,7 @@ def main():
 
     # Print returned search result.
     print("Table ALL column search data:")
-    # Print returned search result (actuall number search rows found).
+    # Print returned search result (actual number search rows found).
     print("Array length = " + str(ret_array_length2[0]))
     for i in range(int(ret_array_length2[0])):
     #for( i = 0; i < ret_array_length2; i++)
@@ -869,7 +894,7 @@ def main():
     """
     ## Original C byte array
     #unsigned char bin_data[16] = {0xff, 0xd8, 0xff, 0xe2, 0x02, 0x1c, 0x49, 0x43, 0x43, 0x5f, 0x50, 0x52, 0x4f, 0x46, 0x49, 0x4c};
-    ## Python bytes list as hexidecimal or (integers)
+    ## Python bytes list as hexadecimal or (integers)
     ## [255,216,255,226,2,28,73,67,67,95,80,82,79,70,73,76] Native values for a byte.
     ## Byte list
     bin_data_list = [0xff, 0xd8, 0xff, 0xe2, 0x02, 0x1c, 0x49, 0x43, 0x43, 0x5f, 0x50, 0x52, 0x4f, 0x46, 0x49, 0x4c]
@@ -878,7 +903,7 @@ def main():
         print(bin_data_list[i], end=',')  # As byte decimal (native).
     print()
     for i in range(len(bin_data_list)):
-        print(hex(bin_data_list[i]), end=',')  # As Hexidecimal.
+        print(hex(bin_data_list[i]), end=',')  # As Hexadecimal.
     print("\n=============")
 
     ## Byte string
@@ -887,7 +912,7 @@ def main():
         print(bin_data_bstring[i], end=',')  # As byte decimal (native)
     print()
     for i in range(len(bin_data_bstring)):
-        print(hex(bin_data_bstring[i]), end=',')  # As Hexidecimal
+        print(hex(bin_data_bstring[i]), end=',')  # As Hexadecimal
     print("\n=============")
 
 
@@ -897,7 +922,7 @@ def main():
         print(bytes_string2[i], end=',')  # As byte decimal (native).
     print()
     for i in range(len(bytes_string2)):
-        print(hex(bytes_string2[i]), end=',')  # As Hexidecimal.
+        print(hex(bytes_string2[i]), end=',')  # As Hexadecimal.
     print("\n=============")
 
     bytes_list2 = list(bin_data_bstring)  # Convert byte string to byte list.
@@ -905,7 +930,7 @@ def main():
         print(bytes_list2[i], end=',')  # As byte decimal (native).
     print()
     for i in range(len(bytes_list2)):
-        print(hex(bytes_list2[i]), end=',')  # As Hexidecimal.
+        print(hex(bytes_list2[i]), end=',')  # As Hexadecimal.
     print("\n=============")
 
     print(bytes_string2.hex())
@@ -914,7 +939,12 @@ def main():
     print(bin_data_bstring.hex())
     """
 
+
 #==============================================================================
+    """
+    ## Note some variable name defines may need to be commented in or out
+    ## When using different examples.
+   
     # Define our type flags. Renamed to avoid name conflicts with sqlite built
     # in type constants.
     # Note:NUMERIC can hold any data type as an integer but is an affinity
@@ -927,10 +957,12 @@ def main():
     IS_BLOB = 4
 
     # Blob table name.
+    ## Do Not comment out when using latter examples!
     db_table_namex1 = "DATA_Blobs"  # Table with single column BLOB
+    """
 
-
-    ## Creae a table and field for binary BLOBS
+    """
+    ## Create a table and field for binary BLOBS
     db_table5 = "CREATE TABLE IF NOT EXISTS DATA_Blobs\
                          (Binary_data BLOB);"
 
@@ -940,12 +972,12 @@ def main():
     elif err_return == 1:
         print("Table " + db_table_namex1 + " was successfully created in " + file_name)
     else:
-        printf("There was an unknown error " + db_table_namex1 )
+        print("There was an unknown error " + db_table_namex1 )
     print("===========================================")
+    """
 
 
-
-
+    
     ## Insert some binary (BLOB) test data.
 
     # bin_data...
@@ -962,9 +994,9 @@ def main():
 
     # we can get the length from the byte string or provide it manually.
     bin_data_len = len(bin_data_bstring)
-    print(bin_data_len)
+    #print(bin_data_len)  # DEBUG
     #bin_data_len = 16
-
+    """
     # A variation of the INSERT statement using sqlite3_bind_*().
     # We can send data/values separately replacing the values into '?' using
     # various sqlite3_bind*() functions. It will be necessary to know the
@@ -973,7 +1005,7 @@ def main():
     # "INSERT INTO DATA_Blobs (Binary_data) VALUES(\?);" <- ? not escaped in Python.
     db_tbl_entry5 = "INSERT INTO DATA_Blobs (Binary_data) VALUES(?);"
 
-    # NOTE! bin_data must be suplied as a Python 3 byte'string' aka b'\x0b\xff ...'
+    # NOTE! bin_data must be supplied as a Python 3 byte'string' aka b'\x0b\xff ...'
     # If the data is a byte list it must be converted ( byte_string = bytes(byte_list) )
     err_return = example_sql3.db_insert_table_rowdata_bin(file_name, db_tbl_entry5, bin_data_bstring, bin_data_len)
     if err_return == 0:
@@ -983,7 +1015,7 @@ def main():
     else:  # == -1
         print("There was an unknown error.")
     print("===========================================")
-
+    """
 
 #==============================================================================
 
@@ -993,7 +1025,7 @@ def main():
 
     err_return = example_sql3.db_get_table_number_cols(file_name, db_table_namex1, number_cols_retx)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_namex1 + " column number from " + file_name)
+        print("Could not retrieve table " + db_table_namex1 + " column number from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_namex1 + " column number from " + file_name)
     else:  # == -1
@@ -1038,7 +1070,7 @@ def main():
     # NOTE: SQLite3 does have it's own internal typeless data structure Mem.
     # typedef struct Mem Mem;
     # It is an extremely complex data structure that includes many other data
-    # structures defined in the sqlite source. Also it is predomenently used
+    # structures defined in the sqlite source. Also it is predominantly used
     # with the sqlite3_value/_* set of API functions.
     # typedef struct sqlite3_value sqlite3_value;
     # It is more convenient to create our own tag struct, union or linked list
@@ -1061,8 +1093,8 @@ def main():
     # Unlike C Python already uses "Objects" that are similar to the tagVARIANT
     # type so we don't have to recreate the C structure and union. I will use
     # a list of dict so that we can easily identify the type contained in the
-    # Python object. We can identify basic python types useing type(object[n])
-    # but these do not always align to the SQLite type afinity required to
+    # Python object. We can identify basic python types using type(object[n])
+    # but these do not always align to the SQLite type affinity required to
     # correctly identify the data, so I will use the SQLite data types.
 
     # Basic data container 2D list of [row][col][dict]:
@@ -1074,7 +1106,7 @@ def main():
     # print(data_list[1][2]['typeof']) >> TEXT
     # print(str(data_list[1][2]['data']) >> Hello world
 
-    # Added BLOB byte 'length' as legacy but not really required.
+    # Added BLOB byte 'length'/to dict as legacy but not really required.
 
     # We have to declare and initialise the empty list of dict here and send
     # it to the function. I have shown the prototype for this using col length
@@ -1109,18 +1141,20 @@ def main():
         print("Unknown error!")  # should never occur
 
 
-
+    ## Print all mixed data types returned from the table. Each column is sorted
+    ## to the relevant type by testing ['typeof'].
     print("\nPrint mixed table data from variant_array.")
-    #bdata_len2 = 0 # The original length of the array of VARIANT  (bin_data_len = 16)
+    # To DEBUG test against the original length of the array of VARIANT (bin_data_len = 16)
+    #bdata_len2 = 0
     # Step through each row from the list.
     for j in range(variant_array_rowlen):  # or ret_variant_row_elements
-        print("\nRow element = " + str(j))
+        print("\n====> Row element = " + str(j))
 
         # Step through each list element[][i] containing a dict. In this case
         # each element[][i] contains 3 dict items.
         for i in range(variant_array_collen):  # < ret_variant_field_elements
-            print("Column element = " + str(i))
-            # The first dict itme is the data type. Use this to select the correct
+            print("|Column element| = " + str(i))
+            # The first dict item is the data type. Use this to select the correct
             # usage of the returned data.
             caseis = variant_array[j][i]['typeof']
             ## C like match case is introduced in Python 3.10 onwards.
@@ -1168,10 +1202,10 @@ def main():
                 print("\b}")  # Note: Backspace does not work in all terminals.
                 print("BLOB = {", end='')
                 for x in range(variant_array[j][i]['length']):
-                    print(hex(byte_string[x]), end=',')  # As Hexidecimal
+                    print(hex(byte_string[x]), end=',')  # As Hexadecimal
                 print("\b}")  # Note: Backspace does not work in all terminals.
 
-                # Debug test
+                # Debug compare test.
                 if bin_data_bstring == byte_string:
                     print("BLOB data is the same as the original.")
 
@@ -1181,7 +1215,7 @@ def main():
             #_case:  # default:
                 # Report an error, this shouldn't happen!
                 print("IS_ERR")
-                printf("##default=" + str(variant_array[j][i]['typeof']) + "##")
+                print("##default=" + str(variant_array[j][i]['typeof']) + "##")
                 #break;
             ## END if [match case (switch case)]
             print("")  # Line break
@@ -1196,19 +1230,19 @@ def main():
 
 #==============================================================================
     """
-    ## Test our original "Hrs_worked_Tracker" TEXT table with retreive all data types.
+    ## Test our original "Hrs_worked_Tracker" TEXT table with retrieve all data types.
     ## This if from the first TEXT only table examples.
 
-    ## Retrive current table column number.
+    ## Retrieve current table name and column number.
 
     db_table_namex2 = db_table_name  # "Hrs_worked_Tracker"
 
     # Get number of columns in a named table.
-    #number_cols_retx = []
+    number_cols_retx = []  ## Previously defined
 
     err_return = example_sql3.db_get_table_number_cols(file_name, db_table_namex2, number_cols_retx)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_namex2 + " column number from " + file_name)
+        print("Could not retrieve table " + db_table_namex2 + " column number from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_namex2 + " column number from " + file_name)
     else:  # == -1
@@ -1218,8 +1252,8 @@ def main():
     print("===========================================")
 
 
-    # Retrive current table rows number.
-    #number_rows_retx = []
+    # Retrieve current table rows number.
+    number_rows_retx = []  ## Previously defined
 
     err_return = example_sql3.db_get_table_number_rows(file_name, db_table_namex2, number_rows_retx);
     if err_return == 0:
@@ -1233,8 +1267,7 @@ def main():
     print("===========================================")
 
 
-
-    ## retreieve all table data ("DATA_Blobs")
+    ## retrieve all table data ("Hrs_worked_Tracker")
     variant_array_rowlen = number_rows_retx[0]  # Always check the most recent number of rows in the table
     variant_array_collen = number_cols_retx[0] + 1  # The number of columns + 1 for rowid
 
@@ -1268,9 +1301,9 @@ def main():
 
     print("\nPrint mixed table data from variant_array.")
     for j in range(variant_array_rowlen):  # or ret_variant_row_elements
-        print("\nRow element = " + str(j))
+        print("\n====> Row element = " + str(j))
         for i in range(variant_array_collen):  # < ret_variant_field_elements
-            print("Column element = " + str(i))
+            print("|Column element| = " + str(i))
             # access each element of tag_VARIANT in variant_array[n]
             caseis = variant_array[j][i]['typeof']
             ## C like match case is introduced in Python 3.10 onwards.
@@ -1309,30 +1342,21 @@ def main():
                 # Legacy length of byte array...
                 print("array len = " + str(variant_array[j][i]['length']))
 
-                # Debug test.
-                # (bin_data_len = 16) # The original length of the array of VARIANT.
-                if 16 == len(byte_string):
-                    print("Returned bytes same length as original bytes.")
-
                 print("BLOB = {", end='')  # Can't concatenate bytes b''
                 for x in range(variant_array[j][i]['length']):
                     print(byte_string[x], end=',')  # As byte decimal (native)
                 print("\b}")  # Note: Backspace does not work in all terminals.
                 print("BLOB = {", end='')
                 for x in range(variant_array[j][i]['length']):
-                    print(hex(byte_string[x]), end=',')  # As Hexidecimal Unformated.
+                    print(hex(byte_string[x]), end=',')  # As Hexadecimal Un-Formatted.
                 print("\b}")  # Note: Backspace does not work in all terminals.
 
-                # Debug test
-                if bin_data_bstring == byte_string:
-                    print("BLOB data is the same as the original.")
 
-                #0000  ff d8 ff e2 02 1c 49 43 43 5f 50 52 4f 46 49 4c  ......ICC_PROFIL
             else:
             #_case:  # default:
                 # Report an error, this shouldn't happen!
                 print("IS_ERR")
-                printf("##default=" + str(variant_array[j][i]['typeof']) + "##")
+                print("##default=" + str(variant_array[j][i]['typeof']) + "##")
                 #break;
             ## END if [match case (switch case)]
             print("")  # Line break
@@ -1347,14 +1371,11 @@ def main():
     #========================================================================<<
 
     #========================================================================>>
-    ## ====>> Do insert and retreive from mixed data types table. ===========>>
+    ## ====>> Do insert and retrieve from mixed data types table. ===========>>
 
-
+    """
     ## You will need this table name available to all of the following examples.
     db_table_mixed = "DATA_Mixed"  # Table with mixed data types.
-
-
-
 
     # Note: REAL == SQLITE_FLOAT == IS_FLOAT == 2 (int constants)
     sql_table_fields = "CREATE TABLE IF NOT EXISTS " + db_table_mixed + "\
@@ -1376,9 +1397,8 @@ def main():
     elif err_return == 1:
         print("Table " + db_table_mixed + " was successfully created in " + file_name)
     else:
-        printf("There was an unknown error " + sql_table_fields )
+        print("There was an unknown error " + sql_table_fields )
     print("===========================================")
-
 
 
 
@@ -1390,8 +1410,8 @@ def main():
     fp_tux.close()
 
     ## The following method inserts the data as part of the query statement.
-    ## For this use we need to convert the byte string into a formated string
-    ## of Hex value pairs x'ffb623 ... '. If using the parametrized statements
+    ## For this use we need to convert the byte string into a formatted string
+    ## of Hex value pairs x'ffb623 ... '. If using the parameterised statements
     ## as previously shown in the single blob column above
     ## ( ? in the query plus the sqlite3_bind_*) then the BLOB data must be
     ## provided as a byte string b"\xff\xd8\xff\xe2\x02 ...".
@@ -1443,7 +1463,9 @@ def main():
     else:  # == -1
         print("There was an unknown error.")
     print("===========================================")
+    """
 
+    #=========================================================================
 
     """
     ## Retrive the previously inserted mixed data types.
@@ -1455,7 +1477,7 @@ def main():
 
     err_return = example_sql3.db_get_table_number_cols(file_name, db_table_namex2, number_cols_retx)
     if err_return == 0:
-        printf("Could not retrieve table " + db_table_namex2 + " column number from " + file_name)
+        print("Could not retrieve table " + db_table_namex2 + " column number from " + file_name)
     elif err_return == 1:
         print("Retrieved table " + db_table_namex2 + " column number from " + file_name)
     else:  # == -1
@@ -1518,9 +1540,9 @@ def main():
     ## Print out or use our returned data from the VARIANT (variant_array).
     print("\nPrint mixed table data from variant_array.")
     for j in range(variant_array_rowlen):  # or ret_variant_row_elements
-        print("\nRow element = " + str(j))
+        print("\n====> Row element = " + str(j))
         for i in range(variant_array_collen):  # < ret_variant_field_elements
-            print("Column element = " + str(i))
+            print("|Column element| = " + str(i))
             # access each element of tag_VARIANT in variant_array[n]
             caseis = variant_array[j][i]['typeof']
             ## C like match case is introduced in Python 3.10 onwards.
@@ -1558,31 +1580,31 @@ def main():
                 print("byte_string len = ", len(byte_string))
                 # Legacy length of byte array...
                 print("array len = " + str(variant_array[j][i]['length']))
-                print("bstr_avatar len = " + str(len(bstr_avatar)))
+                #print("bstr_avatar len = " + str(len(bstr_avatar)))  # DEBUG
 
                 # Debug length test.
-                if variant_array[j][i]['length'] == len(bstr_avatar):
-                    print("Returned bytes same length as original bytes.")
+                #if variant_array[j][i]['length'] == len(bstr_avatar):  # DEBUG
+                #    print("Returned bytes same length as original bytes.")  # DEBUG
 
                 # Formated binaries.
-                print("BLOB int = {", end='')  # Can't concatenate bytes b''
-                for x in range(variant_array[j][i]['length']):
-                    print(byte_string[x], end=',')  # As byte decimal (native).
-                print("\b}")  # Note: Backspace does not work in all terminals.
+                #print("BLOB int = {", end='')  # Can't concatenate bytes b''
+                #for x in range(variant_array[j][i]['length']):
+                #    print(byte_string[x], end=',')  # As byte decimal (native).
+                #print("\b}")  # Note: Backspace does not work in all terminals.
 
-                print("BLOB hex = {", end='')
-                for x in range(variant_array[j][i]['length']):
-                    #print(hex(byte_string[x]), end=',')  # As Hexidecimal.
-                    #print('{:#04x}'.format(byte_string[x]), end=',')  # with '0' padding.
-                    print('{:02x}'.format(byte_string[x]), end=' ')  # with '0' padding.
-                print("\b}")  # Note: Backspace does not work in all terminals.
+                #print("BLOB hex = {", end='')
+                #for x in range(variant_array[j][i]['length']):
+                #    #print(hex(byte_string[x]), end=',')  # As Hexadecimal.
+                #    #print('{:#04x}'.format(byte_string[x]), end=',')  # with '0' padding.
+                #    print('{:02x}'.format(byte_string[x]), end=' ')  # with '0' padding.
+                #print("\b}")  # Note: Backspace does not work in all terminals.
 
             else:
             #_case:  # default
             #default:
                 # Report an error, this shouldn't happen!
                 print("IS_ERR")
-                printf("##default=" + str(variant_array[j][i]['typeof']) + "##")
+                print("##default=" + str(variant_array[j][i]['typeof']) + "##")
                 #break;
             ## END if [match case (switch case)]
             print("")  # Line break
@@ -1596,13 +1618,8 @@ def main():
     """
 
 
-
     return None
 ## END main
-
-
-
-
 
 
 # Console Pause wrapper.

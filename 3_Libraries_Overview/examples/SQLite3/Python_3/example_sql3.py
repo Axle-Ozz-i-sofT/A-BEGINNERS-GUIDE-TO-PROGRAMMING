@@ -25,7 +25,7 @@
 # (.dll, .so) exposed C API. In essence python types are translated to C types
 # for use by the C based shared object, and then C types are converted back to
 # Python types when data is returned. This happens by default with most Python
-# library modules but occurs in a more opeque manner in the background.
+# library modules but occurs in a more opaque manner in the background.
 #
 #-------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ def sqlite3_get_version0():
 
     # NOTE: I am using the C API interface directly and not as a query. SQLite
     # provides a limited number of helper MACROS that can be accessed directly
-    # without opening a databse.
+    # without opening a database.
 
     # The return is already converted to Python UTF-8 string by the function.
     return ozz_sql3.sqlite3_libversion_number(id_lib_sql3)
@@ -366,8 +366,8 @@ def db_file_exists(db_file_name):
         print("Cannot open file " + db_file_name, file=sys.stderr)  # DEBUG
         return 0
 
-    # The SQLite 3 header is exacly 100 (0 - 99) bytes long imediately followed
-    # by a newline char '\n' == Dec 13 == LF at 101 charcters.
+    # The SQLite 3 header is exactly 100 (0 - 99) bytes long immediately followed
+    # by a newline char '\n' == Dec 13 == LF at 101 characters.
     try:
         line_buffer = fp.read(110)  # read 110 bytes.
         cnt = 0
@@ -439,7 +439,7 @@ def db_file_create(db_file_name):
     # Note: This function is part of the examples_sql3 and not part of ozz_sql3 binder.
     if 1 == db_file_exists(db_file_name):
         print("Database: " + db_file_name + " already exists!", file=sys.stderr)  # DEBUG
-        ## stderr occurs after the proccess closes, so can occurer later than expected.
+        ## stderr occurs after the process closes, so can occurred later than expected.
         return 2  # error codes needs to be reviewed.
 
     p_zVfs = None  # can use NULL = None
@@ -983,6 +983,7 @@ def db_table_delete(db_file_name, db_table_name):
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print("Successfully deleted table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1074,6 +1075,7 @@ def db_get_table_number_rows(db_file_name, db_table_name, number_rows_ret):
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print("Successfully retrieved table row number from " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1155,6 +1157,7 @@ def db_get_table_number_cols(db_file_name, db_table_name, number_cols_ret):
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print("Successfully retrieved table column number from " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1241,6 +1244,7 @@ def db_get_table_colnames(db_file_name, db_table_name, db_tbl_col_name):
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print("Successfully retrieved table column names from " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1324,6 +1328,7 @@ def db_insert_table_rowdata(db_file_name, db_tbl_entry): # add insert at row_id
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully inserted rowdata into table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1355,11 +1360,11 @@ def db_delete_table_rowdata(db_file_name, sql_search_entry): # add delete at row
     pzTail = None
     NULL = None
 
-    print("Are your sure you want to delete all rows containg the search words?")
+    print("Are your sure you want to delete all rows containing the search words?")
     print(db_delete_table_rowdata, end='')
     choose = input()
     if (choose != 'y') or (choose != 'Y'):
-        print("Delete operation canceled by user.", file=sys.stderr)  # DEBUG
+        print("Delete operation cancelled by user.", file=sys.stderr)  # DEBUG
         return 0
 
     return_code = ozz_sql3.sqlite3_open_v2( id_lib_sql3, db_file_name, p_db, SQLITE_OPEN_READWRITE, p_zVfs )
@@ -1408,6 +1413,7 @@ def db_delete_table_rowdata(db_file_name, sql_search_entry): # add delete at row
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully removed rowdata from table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1493,7 +1499,7 @@ def db_list_table_rows_data(db_file_name, db_table_name, db_tbl_rowdata, number_
 
             # Concatenate buffer1 to our buffer2.
             buffer2 = buffer2 + buffer1  # buffer2 holds each row...
-            if cnt_col < number_columns -1: # Dont add ', ' after last column.
+            if cnt_col < number_columns -1: # Don't add ', ' after last column.
                 buffer2 = buffer2 + ","  # add separator token between each col.
             else:  # Add line return, end of row.
                 pass  #strcat(p_db_tbl_rowdata[cnt_row], "\n");
@@ -1519,12 +1525,124 @@ def db_list_table_rows_data(db_file_name, db_table_name, db_tbl_rowdata, number_
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print("Successfully retrieved table data from " + db_file_name, file=sys.stderr)  # DEBUG
 
     return 1
 ## END Function
 
+
+# Test if rowid exist in a table.
+def db_table_rowid_exists(db_file_name, db_table_name, tbl_rowid):
+
+    # Get the path to the SQLite3 shared library file (dll/so).
+    f_library_sql3 = ozz_sql3.get_libsql3_path()  # Get the path for sqlite.dll/so
+
+    # Load the sqlite3 shared library. The returned ID from loading the sqlite
+    # shared library must be passed to other functions.
+    id_lib_sql3  = ozz_sql3.load_libsql3(f_library_sql3)
+
+    # sqlite3 *p_db;  # database handle (structure).
+    p_db = ozz_sql3.p_sqlite3()  # Get the sqlite3 structure.
+
+    # sqlite3_stmt *p_stmt;  # structure represents a single SQL statement
+    p_stmt = ozz_sql3.p_sqlite3_stmt()  # Get the sqlite3_stmt structure.
+
+    return_code = 0
+    err_ret = 0
+
+    p_zVfs = None  # can use NULL = None
+    pzTail = None
+    NULL = None
+
+
+    return_code = ozz_sql3.sqlite3_open_v2( id_lib_sql3, db_file_name, p_db, SQLITE_OPEN_READONLY, p_zVfs )
+    if return_code != SQLITE_OK:
+        # Note: these print returns can be commented out if only the Bool return 0; is required.
+        print("Can't open database: " + ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
+
+    sql_concat = ""  # temp buffer [MAX 128 characters]
+    rowid_buffer = ""  # convert int to char for statement concat.
+    # Clear the buffer from the last statement. strcat() will concat on to
+    # the previous statement otherwise.
+    #sql_concat = ""
+
+    rowid_buffer = (str(tbl_rowid))  # convert rowid int to string.
+    #sprintf(rowid_buffer, "%d", tbl_rowid); // convert rowid int to string.
+
+    # SELECT EXISTS(SELECT 1 FROM myTbl WHERE WHERE rowid = tbl_rowid);
+    # "SELECT rowid, * FROM "
+
+    # Both of the following queries will return a correct result.
+    sql1 = "SELECT EXISTS(SELECT 1 FROM "
+    sql2 = " WHERE rowid = "
+    sql3 = ");"
+
+    #sql1 = "SELECT Count() FROM "
+    #sql2 = " WHERE rowid = "
+    #sql3 = ";"
+
+    #strcat(sql_concat, sql1);  // Add SQL query statement.
+    sql_concat += sql1
+    #strcat(sql_concat, db_table_name);  // Add SQL query statement.
+    sql_concat += db_table_name
+    #strcat(sql_concat, sql2);  // Add SQL query statement.
+    sql_concat += sql2
+    #strcat(sql_concat, rowid_buffer);  // Add SQL query statement.
+    sql_concat += rowid_buffer
+    #strcat(sql_concat, sql3);
+    sql_concat += sql3
+
+    #print(sql_concat)
+
+    # We can only send one query at a time to sqlite3.
+    return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_concat, -1, p_stmt, pzTail)
+    # On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
+    # is returned.
+    if return_code != SQLITE_OK:
+        # This is error handling code for the sqlite3_prepare_v2 function call.
+        print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
+
+    return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)  # run once for one statement
+    #    while( sqlite3_step( stmt ) == SQLITE_ROW ) {;}
+    if return_code != SQLITE_ROW:  # SQLITE_DONE==101, SQLITE_ROW==100
+        print("Step failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
+
+    return_code = ozz_sql3.sqlite3_column_int(id_lib_sql3, p_stmt, 0)
+    if return_code == 0:
+        err_ret = 0
+    else:  # ==1
+        err_ret = 1
+
+    #sqlite3_bind_*()  // After sqlit3_prepare_v2()
+    #sqlite3_clear_bindings(p_stmt);
+
+    # The sqlite3_finalize function destroys the prepared statement object.
+    return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
+    if return_code != SQLITE_OK:  # SQLITE_OK==0
+        # This is error handling code.
+        print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
+
+    # The sqlite3_close function closes the database connection.
+    return_code = ozz_sql3.sqlite3_close(id_lib_sql3, p_db)   # SQLITE_OK==0
+    if return_code != SQLITE_OK:
+        # This is error handling code. NOTE! As p_db is closed the error code may not be available!
+        print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+        ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
+
+    return err_ret
+    return 1
+## END Function
 
 
 # delete row by "rowid"
@@ -1604,6 +1722,7 @@ def db_delete_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid):
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully removed rowdata from table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1693,6 +1812,7 @@ def db_replace_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fi
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully inserted rowdata into table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -1700,7 +1820,16 @@ def db_replace_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fi
 ## END Function
 
 
-# Insert row data into a named table at rowid.
+# Insert row data into a named table at rowid. (Not recommended)
+# I had some issues with non contiguous rowid numbers. I have created a test
+# flag to skip empty rowid. Empty row id remain unchanged and all other
+# filled rows are moved down one slot. This is a bit hackish and not the
+# best method. We could use VACUUM to make the rowid index contiguous before
+# each routine requiring rowid manipulation, or we can copy the table to
+# a memory file with contiguous rowid, or last copy the enter table to our
+# application memory and perform the table tasks there before re-writing
+# the table fresh.
+#
 # The current data at the rowid is written into a temporary buffer, the new row
 # data is then written to that rowid.
 # Each row is "shuffled" down one rowid at at time until the last rowid.
@@ -1714,7 +1843,7 @@ def db_replace_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fi
 # In a large data base file this will be a slow task and could be prone to errors.
 # It can also disrupt the association of the rowid between different tables
 # in a relational database.
-
+#
 # Table unique index rowid is auto generated in this table.
 def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_field_names, db_field_values, number_columns, number_rows):
 
@@ -1738,10 +1867,12 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
     NULL = None
 
     Count_Rows = sql_rowid  # start counting from the first insert rowid.
+    test_rowid = 0  # Used for flags in missing rowid.
+    W_Flag = 0  #  Used for flags in missing rowid.
 
     #buffer = ""  # Temp column read buffer [MAX 128 characters]
     # This 2 dimension array will hold the temporary data for the rows being read
-    # and then writen to the next line.
+    # and then written to the next line.
     db_field_values_temp = [None] * 2  # buffer to hold each line to move down +1
 
     # This is the new data (row) to be inserted at the rowid.
@@ -1770,7 +1901,7 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
         if Count_Rows < number_rows +1:
             sql_concat = ""  # Clear the buffer
             # "SELECT rowid, * FROM "  # Note that I am ignoring the rowid
-            sql1 = "SELECT * FROM "  # Note the space after FROM
+            sql1 = "SELECT rowid, * FROM "  # Note the space after FROM
             sql2 = " WHERE rowid =  "
             sql3 = ";"
 
@@ -1784,7 +1915,7 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
             # is returned.
             if return_code != SQLITE_OK:
                 # This is error handling code for the sqlite3_prepare_v2 function call.
-                print("Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+                print("Read, Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
                 ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
                 return -1
 
@@ -1797,15 +1928,19 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
             # if (return_code == SQLITE_ROW){}
             #else if (return_code == SQLITE_DONE || return_code == SQLITE_DONE){ break;}
             # else {error return;}
-            while ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt) == SQLITE_ROW:
-                #while (1)
+            step_ret = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)
+            #while ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt) == SQLITE_ROW:
+            test_rowid = ozz_sql3.sqlite3_column_int(id_lib_sql3, p_stmt, 0)
+            if (( test_rowid != 0) or (step_ret == SQLITE_ROW)):
+
+                W_Flag = 0  # Reset the wite flag if rowid has an entry.
 
                 #return_code = sqlite3_step(stmt);
                 #if (return_code == SQLITE_ROW)
                 #{
                 # Can use sqlite3_column_count(statement/stmt) in place of number_columns.
-                for i in range(number_columns):  # Count 0 to number_columns-1
-                #for (int i = 0; i < number_columns; i++)  # Count 0 to number_columns-1
+                # Changed to i = 1 to number_columns +1. The first rowid column is skipped.
+                for i in range(1, number_columns +1):  # Count 0 to number_columns-1
 
                     # To handle the return of NULL pointers as a string
                     # data = (const char*)sqlite3_column_text( stmt, i );
@@ -1822,30 +1957,18 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
                     # Here we are reading the row into [1] of the temporary R/W buffer.
                     buffer = buffer + "\""
 
-                    if i < number_columns -1: # Don't add ', ' after last column.
+                    if i < number_columns +1 -1: # Don't add ', ' after last column.
                         buffer = buffer + ","
-                    else:  # Add line return, end of row.
-                        pass  #strcat(p_db_tbl_rowdata[cnt_row], "\n");
+
                     ## END for
                 db_field_values_temp[1] = buffer
                 #buffer = ""  # Clear the buffer for the next row.
 
-                #}
-                #else if ((return_code == SQLITE_DONE) || (return_code == SQLITE_OK))  # ???? SQLITE_OK
-                #    {
-                # No more rows to read, but we need to write the last row at this rowid!
-                #send flag or continue past sqlite3_finalize.
-                #    Flag_More_Rows = 0;
-                #    break;
-                #    }
-                #else
-                #    {
-                # Unknown error!!!
-                # Create error return code!
-                #Flag_More_Rows = 0;
-                #    break;
-                #    }
-                ## END while
+            else:
+                # Skip read data on empty rowid.
+                W_Flag += 1  # Flag to write last line. Can use test_rowid instead.
+                number_rows += 1  # Correct the total row count to match last system rowid
+            ## END if test_rowid
 
             #sqlite3_bind_*()  # After sqlit3_prepare_v2()
             #sqlite3_clear_bindings(stmt);
@@ -1858,88 +1981,93 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
                 ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
                 return -1
 
-            ## END Skip reading +1 empty line (if Count_Rows < number_rows +1:)
+        ## END Skip reading +1 empty line (if Count_Rows < number_rows +1:)
 ##=============================================================== end step 1
 ##==================================================== Start step 2. Write rowid
 
-        # Clear the buffer from the last statement. strcat() will concat on to
-        # the previous statement otherwise.
-        sql_concat = ""
+        if (W_Flag < 1):  # Skip writting empty buffer data.
 
-        sql01a = "REPLACE INTO "
-        sql01b = "INSERT INTO "
-        sql02a = " (rowid, "
-        sql02b = " ("
-        sql03 = ") VALUES("
-        sql04 = ", "
-        sql05 = ");"
+            # Clear the buffer from the last statement. strcat() will concat on to
+            # the previous statement otherwise.
+            sql_concat = ""
 
-        # Some logic to handle the last row inserted to a new rowid.
-        if (Count_Rows < number_rows +2):
-            sql_concat = sql_concat + sql01a  # "REPLACE INTO "
-        else:  # New row (original last row +1)
-            sql_concat = sql_concat + sql01b  # "INSERT INTO "
+            sql01a = "REPLACE INTO "
+            sql01b = "INSERT INTO "
+            sql02a = " (rowid, "
+            sql02b = " ("
+            sql03 = ") VALUES("
+            sql04 = ","
+            sql05 = ");"
 
-        sql_concat = sql_concat + db_table_name  # Add table name to statement.
+            # Some logic to handle the last row inserted to a new rowid.
+            if (Count_Rows < number_rows +2):
+                sql_concat = sql_concat + sql01a  # "REPLACE INTO "
+            else:  # New row (original last row +1)
+                sql_concat = sql_concat + sql01b  # "INSERT INTO "
 
-        if (Count_Rows < number_rows +2):
-            sql_concat = sql_concat + sql02a  # " (rowid, "
-        else:
-            sql_concat = sql_concat + sql02b  # " ("
+            sql_concat = sql_concat + db_table_name  # Add table name to statement.
 
-        sql_concat = sql_concat + db_field_names  # Add feild name (column name).
+            if (Count_Rows < number_rows +2):
+                sql_concat = sql_concat + sql02a  # " (rowid, "
+            else:
+                sql_concat = sql_concat + sql02b  # " ("
 
-        if (Count_Rows < number_rows +2):
-            sql_concat = sql_concat + sql03   # ") VALUES(\""
-            sql_concat = sql_concat + rowid_buffer  # This is the fist rowid for new values [As SQL INTEGER]
-            sql_concat = sql_concat + sql04  #  ", " delimit rowid, col_values, ...
-        else:
-            sql_concat = sql_concat + sql03  # ") VALUES("
+            sql_concat = sql_concat + db_field_names  # Add field name (column name).
 
-        # Add the last row read into the same rowid
-        sql_concat = sql_concat + db_field_values_temp[0]  # Add the values.
-        sql_concat = sql_concat + sql05  # Finish the statement with ");"
+            if (Count_Rows < number_rows +2):
+                sql_concat = sql_concat + sql03   # ") VALUES(\""
+                sql_concat = sql_concat + rowid_buffer  # This is the fist rowid for new values [As SQL INTEGER]
+                sql_concat = sql_concat + sql04  #  ", " delimit rowid, col_values, ...
+            else:
+                sql_concat = sql_concat + sql03  # ") VALUES("
 
-        # We can only send one query at a time to sqlite3.
-        return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_concat, -1, p_stmt, pzTail)
-        # On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
-        # is returned.
-        if return_code != SQLITE_OK:
-            # This is error handling code for the sqlite3_prepare_v2 function call.
-            print("XFailed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
-            ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
-            return -1
+            # Add the last row read into the same rowid
+            sql_concat = sql_concat + db_field_values_temp[0]  # Add the values.
+            sql_concat = sql_concat + sql05  # Finish the statement with ");"
 
-        # The sqlite3_step runs the SQL statement. SQLITE_ROW return code indicates
-        # that there is another row ready. Our SQL statement returns only one row
-        # of data at a time, therefore, we call this function only once at a time.
-        # If we are writing or reading multiple lines of table then we will need to
-        # use sqlite3_step() in a loop until end of SQLITE_ROW or SQLITE_DONE.
-        return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)  # run once for one statement
-        #    while( sqlite3_step( stmt ) == SQLITE_ROW ) {;}
-        if return_code != SQLITE_DONE:  # SQLITE_DONE==101, SQLITE_ROW==100
-            print("Step failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
-            ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
-            return 0
+            #print(sql_concat)  # DEBUG
 
-        #sqlite3_bind_*()  # After sqlit3_prepare_v2()
-        #sqlite3_clear_bindings(stmt);
+            # We can only send one query at a time to sqlite3.
+            return_code = ozz_sql3.sqlite3_prepare_v2(id_lib_sql3, p_db, sql_concat, -1, p_stmt, pzTail)
+            # On success, sqlite3_prepare_v2 returns SQLITE_OK; otherwise an error code
+            # is returned.
+            if return_code != SQLITE_OK:
+                # This is error handling code for the sqlite3_prepare_v2 function call.
+                print("Write, Failed to prepare data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+                ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+                return -1
 
-        # The sqlite3_finalize function destroys the prepared statement object.
-        return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
-        if return_code != SQLITE_OK:  # SQLITE_OK==0
-            # This is error handling code.
-            print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
-            ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
-            return -1
+            # The sqlite3_step runs the SQL statement. SQLITE_ROW return code indicates
+            # that there is another row ready. Our SQL statement returns only one row
+            # of data at a time, therefore, we call this function only once at a time.
+            # If we are writing or reading multiple lines of table then we will need to
+            # use sqlite3_step() in a loop until end of SQLITE_ROW or SQLITE_DONE.
+            return_code = ozz_sql3.sqlite3_step(id_lib_sql3, p_stmt)  # run once for one statement
+            #    while( sqlite3_step( stmt ) == SQLITE_ROW ) {;}
+            if return_code != SQLITE_DONE:  # SQLITE_DONE==101, SQLITE_ROW==100
+                print("Step failed: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+                ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+                return 0
 
-        # Copy the last read [1] back to position [0] for next read write cycle.
-        # This works a little like a last in first out buffer (LIFO).
-        db_field_values_temp[0] = db_field_values_temp[1]
+            #sqlite3_bind_*()  # After sqlit3_prepare_v2()
+            #sqlite3_clear_bindings(stmt);
+
+            # The sqlite3_finalize function destroys the prepared statement object.
+            return_code = ozz_sql3.sqlite3_finalize(id_lib_sql3, p_stmt )  # Commit to the database.
+            if return_code != SQLITE_OK:  # SQLITE_OK==0
+                # This is error handling code.
+                print("Failed to finalize data: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
+                ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+                return -1
+
+            # Copy the last read [1] back to position [0] for next read write cycle.
+            # This works a little like a last in first out buffer (LIFO).
+            db_field_values_temp[0] = db_field_values_temp[1]
+        ## END if W_Flag
         sql_rowid += 1  # Start read/write next rowid..
         Count_Rows += 1  # So we don't count past the existing rows in the table.
 
-        ## End while Continue loop until last table row. (while Count_Rows < number_rows +2:)
+    ## End while Continue loop until last table row. (while Count_Rows < number_rows +2:)
 ##================================================================== End step 2
 
     # The sqlite3_close function closes the database connection.
@@ -1948,6 +2076,7 @@ def db_insert_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_fie
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully inserted rowdata into table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -2051,6 +2180,7 @@ def db_read_table_rowdata_rowid(db_file_name, db_table_name, sql_rowid, db_tbl_r
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully read rowdata from table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -2152,7 +2282,7 @@ def db_search_table_rowdata_byfield(db_file_name, db_table_name, db_tbl_row_sear
         cnt_row += 1
         ## END while
 
-    # Retyrn byref nuber of found rows as element[0] in the list.
+    # Return byref number of found rows as element[0] in the list.
     ret_array_length.insert(0, cnt_row)  # return the length of array of found rows.
 
     #sqlite3_bind_*()  # After sqlit3_prepare_v2()
@@ -2172,6 +2302,7 @@ def db_search_table_rowdata_byfield(db_file_name, db_table_name, db_tbl_row_sear
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully retrieved table search data from " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -2204,7 +2335,7 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
     pzTail = None
     NULL = None
 
-    # Some of these may be redundent.
+    # Some of these may be redundant.
     cnt_col = 0  # Counter to step though name of each column (field)
     i = 0  # Loop counters.
     j = 0  # Loop counters.
@@ -2234,6 +2365,8 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
     # This search routine will only work for tables with type TEXT!
 
     # Be careful of the + 1 in number_columns2 due to extra row_id column.
+    # rowid column is not counted when accessing the field names in the search.
+    # The return values from the search DO include the rowid.
     # ====> START Loop each column name (field).
     for cnt_col in range(number_columns2 -1):
     #for(cnt_col = 0; cnt_col < number_columns2 -1; cnt_col++)
@@ -2304,7 +2437,7 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
                             row_id_exists = 1
                         ## END for j
                     ## END if (i == 0)
-                #====> END Test for reapeat row_id ====>
+                #====> END Test for repeat row_id ====>
 
                 if row_id_exists == 0:  # if row not exist already, write search found to return buffer.
 
@@ -2353,6 +2486,7 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully retrieved table search data from " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -2360,6 +2494,7 @@ def db_search_table_rowdata_allfields(db_file_name, db_table_name, db_tbl_row_se
 ## END Function
 
 #==============================================================================
+## START Multiple types examples.
 
 # Insert binary row data into a named table.
 # If the data already exists will create a new row.
@@ -2446,6 +2581,7 @@ def db_insert_table_rowdata_bin(db_file_name, db_tbl_entry, bin_data, bin_data_l
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     print( "Successfully inserted rowdata into table in " + db_file_name, file=sys.stderr)  # DEBUG
 
@@ -2456,7 +2592,7 @@ def db_insert_table_rowdata_bin(db_file_name, db_tbl_entry, bin_data, bin_data_l
 # NOTE: SQLite3 does have it's own internal typless data structure Mem.
 # typedef struct Mem Mem;
 # It is an extremely complex data structure that includes many other data
-# structures defined in the sqlite source. Also it is predomenently used
+# structures defined in the sqlite source. Also it is predominantly used
 # with the sqlite3_value/_* set of API functions.
 # typedef struct sqlite3_value sqlite3_value;
 # It is more convenient to create our own tag struct, union or linked list
@@ -2603,6 +2739,7 @@ def db_list_table_all_types(db_file_name, db_table_name, variant_structure, numb
         # This is error handling code. NOTE! As p_db is closed the error code may not be available!
         print("Failed to close database: " + str(ozz_sql3.sqlite3_errmsg(id_lib_sql3, p_db)) + " | " + str(return_code), file=sys.stderr)  # DEBUG
         ozz_sql3.sqlite3_close(id_lib_sql3, p_db)
+        return -1
 
     return 1
     ## END Function

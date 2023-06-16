@@ -25,9 +25,9 @@
 # (.dll, .so) exposed C API. In essence python types are translated to C types
 # for use by the C based shared object, and then C types are converted back to
 # Python types when data is returned. This happens by default with most Python
-# library modules but occurs in a more opeque manner in the background.
+# library modules but occurs in a more opaque manner in the background.
 #
-# This also exemplifies a basic "Porocedural" method for interacting with any
+# This also exemplifies a basic "Procedural" method for interacting with any
 # CDECL based dll/so library from Python 3 that you may have created yourself.
 #
 # NOTE!
@@ -93,7 +93,7 @@ def get_libsql3_path():
         #f_library_sql3 = "D:\\SQLite3Tests\\Py\\sqlite3.dll"
     # for mac and linux
     elif os.name == 'posix':
-        #f_library_sql3 = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recomended
+        #f_library_sql3 = os.path.join(sys.path[0], "libsqlite3.so.0.8.6")  # Not recommended
         f_library_sql3 = "libsqlite3.so"
     else:  # Other OS
         return -1  # OS not defined
@@ -137,7 +137,7 @@ def sqlite3_errmsg(id_lib_sql3, p_db):
 # int sqlite3_libversion_number(void);
 def sqlite3_libversion_number(id_lib_sql3):
 
-    id_lib_sql3.sqlite3_libversion_number.argtypes = None  # No argements are sent to the C function (aka function(void);)
+    id_lib_sql3.sqlite3_libversion_number.argtypes = None  # No arguments are sent to the C function (aka function(void);)
     id_lib_sql3.sqlite3_libversion_number.restype = ctypes.c_int  # returns int = ctypes.ctypes.c_int
 
     return id_lib_sql3.sqlite3_libversion_number()
@@ -145,7 +145,7 @@ def sqlite3_libversion_number(id_lib_sql3):
 # const char *sqlite3_libversion(void);
 def sqlite3_libversion(id_lib_sql3):
 
-    id_lib_sql3.sqlite3_libversion.argtypes = None  # No argements are sent to the C function (aka function(void);)
+    id_lib_sql3.sqlite3_libversion.argtypes = None  # No arguments are sent to the C function (aka function(void);)
     id_lib_sql3.sqlite3_libversion.restype = ctypes.c_char_p  # returns char* = ctypes.c_char_p
 
     return id_lib_sql3.sqlite3_libversion().decode('utf-8')  # Convert b'' to utf-8 str
@@ -153,7 +153,7 @@ def sqlite3_libversion(id_lib_sql3):
 
 # Note that the _open and _prepare functions require access to the class (structures)
 # "By Reference" so that the class (struct) can be assigned data values.
-# Most other fuctions only have to see/read the data thus the
+# Most other functions only have to see/read the data thus the
 # ctypes.POINTER(ctypes.POINTER(sqlite3)) vs ctypes.c_void_p
 
 ## CAPI3REF: Opening A New Database Connection
@@ -248,7 +248,7 @@ def sqlite3_prepare_v3(id_lib_sql3, p_db, sql_query, nByte, prepFlags, pp_stmt, 
 # SQLITE_API int sqlite3_bind_blob(sqlite3_stmt*, int, const void*, int n, void(*)(void*));
 # Handle h_database_open, statement, Index = 1 to limit bin Bytes, length in bytes, Destructor flag
 # Destructor flag [SQLITE_STATIC | SQLITE_TRANSIENT] (* (void*))
-# NOTE! bvalue must be suplied as a Python 3 byte'string' aka b'\x0b\xff ...'
+# NOTE! bvalue must be supplied as a Python 3 byte'string' aka b'\x0b\xff ...'
 # If the data is a byte list it must be converted ( byte_string = bytes(byte_list) )
 # SEE: isinstance(), type() to test for type and conversion.
 #True/False = isinstance("Hello World",str)
@@ -435,7 +435,7 @@ def sqlite3_step(id_lib_sql3, p_stmt):
 ## [SQLITE_INTEGER],[SQLITE_FLOAT],[SQLITE_TEXT],[SQLITE_BLOB],or[SQLITE_NULL]
 
 ## NOTE: All integer values are expanded to the largest size 64-bit and truncated
-## 32-bit if sqlite3_column_int dicarding any overflow. Treat all SQLITE_INTEGER
+## 32-bit if sqlite3_column_int discarding any overflow. Treat all SQLITE_INTEGER
 ## as 64-bit sqlite3_column_int64 unless you are sure that you are not using
 ## larger than 32-bit integers in your application.
 
@@ -508,7 +508,7 @@ def sqlite3_column_text(id_lib_sql3, p_stmt, iCol):
 #SQLITE_API const void *sqlite3_column_text16(sqlite3_stmt*, int iCol);
 
 """
-## The following function has a seperate API usage to the other sqlite3_column_
+## The following function has a separate API usage to the other sqlite3_column_
 ## exemplified here. typedef struct sqlite3_value sqlite3_value;
 #SQLITE_API sqlite3_value *sqlite3_column_value(sqlite3_stmt*, int iCol);
 def sqlite3_column_value(id_lib_sql3, p_stmt, iCol):

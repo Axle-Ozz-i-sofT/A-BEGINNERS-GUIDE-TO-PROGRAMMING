@@ -324,9 +324,9 @@ SQLITE_PREPARE_NORMALIZE    =   0x02
 SQLITE_PREPARE_NO_VTAB      =   0x04
 
 """
-Global Const $SQLITE_ENCODING_UTF8		= 0 ; /* Database will be created if not exists with UTF8 encoding (default) */
-Global Const $SQLITE_ENCODING_UTF16		= 1 ; /* Database will be created if not exists with UTF16le encoding */
-Global Const $SQLITE_ENCODING_UTF16be	= 2 ; /* Database will be created if not exists with UTF16be encoding (special usage) */
+Global Const $SQLITE_ENCODING_UTF8      = 0 ; /* Database will be created if not exists with UTF8 encoding (default) */
+Global Const $SQLITE_ENCODING_UTF16     = 1 ; /* Database will be created if not exists with UTF16le encoding */
+Global Const $SQLITE_ENCODING_UTF16be   = 2 ; /* Database will be created if not exists with UTF16be encoding (special usage) */
 """
 
 """
