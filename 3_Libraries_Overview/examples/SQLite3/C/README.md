@@ -1,5 +1,4 @@
 # C Sqlite 3 wrapper functions and Examples
-## Note! The function db_insert_table_rowdata_rowid() Fails when using a table with non-contiguous "rowid" numbers. I will correct and update soon.  
   
 This is a collection of C warapper functions and examples to illustrate methods of interacting with the SQLite 3 .dll/.so.  
   
@@ -29,6 +28,10 @@ There are 2 C source modules in this repo and are organised as follows:
   
 Example_DB.db is an example of the correct database entries from the examples.  
 Tux.jpg is a small icon used for BLOB entries in the examples.  
+  
+* **variant.c**
+	An naive example of a tagVARIANT data structure as used withing the SQLite 3 examples. It is not used for any SQLite illustrations and is only provided to show the fundimentals of creating a stucture using taged unions to hold multiple data types. VARIANT can hold multiple data types in a similar way to some dynamic typed scripting languages such as Python. For more information see MS data type VARIANT or "Tagged union", "Discriminated Union".  
+  
 ***
 <br>
 As well as the examples provided here I would also recommend obtaining a copy of a database management application to check your entries and queries for accuracy or errors in your code. Although SQLite does provide helpful return and error codes, the inside of the database file can be quite opaque from a programmatic perspective. Use the database management application along side of your IDE to monitor the database.  
