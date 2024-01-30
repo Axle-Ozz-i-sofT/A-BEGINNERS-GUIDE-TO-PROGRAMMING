@@ -1,4 +1,4 @@
-# Book 3 - Libraries Overview
+# Book 3 - Development Libraries Overview
 
 An introduction to the essentials of using additional libraries in the programming environment as well as explaining the use of "Static" and "Dynamic" libraries.  
 
